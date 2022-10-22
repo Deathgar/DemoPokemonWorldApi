@@ -62,4 +62,18 @@ public class PokemonService : IPokemonService
 
         return result != 0;
     }
+
+    public async Task<IEnumerable<HunterViewModel>> GetHunters(int pokemonId)
+    {
+        var hunterDtos = await _repositoryWrapper.PokemonRepository.GetHuntersByPokemonAsync(pokemonId);
+
+        return _mapper.Map<IEnumerable<HunterViewModel>>(hunterDtos);
+    }
+
+    public async Task<HabitatViewModel> GetHabitat(int pokemonId)
+    {
+        var hunterDtos = await _repositoryWrapper.PokemonRepository.GetHabitatByPokemonAsync(pokemonId);
+
+        return _mapper.Map<HabitatViewModel>(hunterDtos);
+    }
 }

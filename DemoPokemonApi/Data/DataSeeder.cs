@@ -54,15 +54,16 @@ public static class DataSeeder
         country2.Habitats.Add(habitat3);
         country2.Habitats.Add(habitat4);
 
-        hunter1.Caughts.Add(new HunterPokemonDto { Pokemon = pokemon1, CatchDate = DateTime.UtcNow.AddMonths(-1) });
-        hunter1.Caughts.Add(new HunterPokemonDto { Pokemon = pokemon4, CatchDate = DateTime.UtcNow.AddMonths(-4) });
-        hunter1.Caughts.Add(new HunterPokemonDto { Pokemon = pokemon5, CatchDate = DateTime.UtcNow.AddMonths(-14) });
-        hunter1.Caughts.Add(new HunterPokemonDto { Pokemon = pokemon1, CatchDate = DateTime.UtcNow.AddMonths(-8) });
+        hunter1.HunterPokemon.Add(new HunterPokemonDto { Pokemon = pokemon1, CatchDate = DateTime.UtcNow.AddMonths(-1) });
+        hunter1.HunterPokemon.Add(new HunterPokemonDto { Pokemon = pokemon4, CatchDate = DateTime.UtcNow.AddMonths(-4) });
+        hunter1.HunterPokemon.Add(new HunterPokemonDto { Pokemon = pokemon5, CatchDate = DateTime.UtcNow.AddMonths(-14) });
+        hunter1.HunterPokemon.Add(new HunterPokemonDto { Pokemon = pokemon1, CatchDate = DateTime.UtcNow.AddMonths(-8) });
+        hunter1.HunterPokemon.Add(new HunterPokemonDto { Pokemon = pokemon6, CatchDate = DateTime.UtcNow.AddMonths(-31) });
 
-        hunter3.Caughts.Add(new HunterPokemonDto { Pokemon = pokemon6, CatchDate = DateTime.UtcNow.AddMonths(-31) });
-        hunter3.Caughts.Add(new HunterPokemonDto { Pokemon = pokemon7, CatchDate = DateTime.UtcNow.AddMonths(-2) });
-        hunter3.Caughts.Add(new HunterPokemonDto { Pokemon = pokemon8, CatchDate = DateTime.UtcNow.AddMonths(-33) });
-        hunter3.Caughts.Add(new HunterPokemonDto { Pokemon = pokemon3, CatchDate = DateTime.UtcNow.AddMonths(-44) });
+        hunter3.HunterPokemon.Add(new HunterPokemonDto { Pokemon = pokemon6, CatchDate = DateTime.UtcNow.AddMonths(-31) });
+        hunter3.HunterPokemon.Add(new HunterPokemonDto { Pokemon = pokemon7, CatchDate = DateTime.UtcNow.AddMonths(-2) });
+        hunter3.HunterPokemon.Add(new HunterPokemonDto { Pokemon = pokemon8, CatchDate = DateTime.UtcNow.AddMonths(-33) });
+        hunter3.HunterPokemon.Add(new HunterPokemonDto { Pokemon = pokemon3, CatchDate = DateTime.UtcNow.AddMonths(-44) });
 
         context.SaveChanges();
     }

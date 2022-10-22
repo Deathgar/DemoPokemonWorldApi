@@ -10,7 +10,7 @@ public class PokemonDto
     public string Name { get; set; }
 
     public List<HunterDto> Hunters { get; set; } = new List<HunterDto>();
-    public List<HunterPokemonDto> Caughts { get; set; } = new List<HunterPokemonDto>();
+    public List<HunterPokemonDto> HunterPokemon { get; set; } = new List<HunterPokemonDto>();
 
     public int? HabitatId { get; set; }
     public HabitatDto? Habitat { get; set; }

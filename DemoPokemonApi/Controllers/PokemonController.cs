@@ -46,4 +46,18 @@ public class PokemonController : ControllerBase
 
         return isSuccess ? new OkResult() : new BadRequestResult();
     }
+
+    [HttpGet]
+    [Route("getHunters/{pokemonId}")]
+    public async Task<IEnumerable<HunterViewModel>> GetHunters(int pokemonId)
+    {
+        return await _pokemonService.GetHunters(pokemonId);
+    }
+
+    [HttpGet]
+    [Route("getHabitat/{pokemonId}")]
+    public async Task<HabitatViewModel> GetHabitat(int pokemonId)
+    {
+        return await _pokemonService.GetHabitat(pokemonId);
+    }
 }

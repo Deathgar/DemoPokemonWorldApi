@@ -12,7 +12,7 @@ public class HunterDto
 
     public List<PokemonDto> Pokemons { get; set; } = new List<PokemonDto>();
 
-    public List<HunterPokemonDto> Caughts { get; set; } = new List<HunterPokemonDto>();
+    public List<HunterPokemonDto> HunterPokemon { get; set; } = new List<HunterPokemonDto>();
     
     public int? CityId { get; set; }
 
@@ -32,11 +32,11 @@ public class HunterConfiguration : IEntityTypeConfiguration<HunterDto>
                .UsingEntity<HunterPokemonDto>(
                     t => t
                         .HasOne(c => c.Pokemon)
-                        .WithMany(p => p.Caughts)
+                        .WithMany(p => p.HunterPokemon)
                         .HasForeignKey(c => c.PokemonId),
                     t => t
                         .HasOne(c => c.Hunter)
-                        .WithMany(h => h.Caughts)
+                        .WithMany(h => h.HunterPokemon)
                         .HasForeignKey(c => c.HunterId),
                     t =>
                     {
