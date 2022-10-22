@@ -62,4 +62,10 @@ public class HunterLicenseService : IHunterLicenseService
 
         return result != 0;
     }
+
+    public async Task<HunterLicenseViewModel> GetByHunterIdAsync(int hunterId)
+    {
+        var dto = await _repositoryWrapper.HunterLicenseRepository.GetByConditionAsync(x => x.HunterId == hunterId);
+        return dto.Any() ? _mapper.Map<HunterLicenseViewModel>(dto.ElementAt(0)) : null;
+    }
 }

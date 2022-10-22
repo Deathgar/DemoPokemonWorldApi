@@ -14,7 +14,6 @@ builder.Services.AddDbContext<PokemonWorldContext>(options =>
 
 builder.Services.ConfigureCors();
 builder.Services.ConfigureRepositoryWrapper();
-builder.Services.ConfigureServices();
 
 builder.Services.AddAutoMapper(typeof(ModelMapper));
 

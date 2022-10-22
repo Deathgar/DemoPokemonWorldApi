@@ -23,9 +23,4 @@ public static class ServiceExtentions
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IServiceWrapper, ServiceWrapper>();
     }
-
-    public static void ConfigureServices(this IServiceCollection services)
-    {
-        services.AddTransient<ICityService, CityService>();
-    }
 }
