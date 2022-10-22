@@ -2,6 +2,6 @@
 
 namespace DemoPokemonApi.Services.Interfaces;
 
-public interface ICountryService : IBaseService<CountryViewModel>
+public interface IHunterService : IBaseService<HunterViewModel>
 {
 }

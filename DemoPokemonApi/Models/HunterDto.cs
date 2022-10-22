@@ -4,37 +4,32 @@ using System.Text.Json.Serialization;
 
 namespace DemoPokemonApi.Models;
 
-public class Hunter
+public class HunterDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public string Age { get; set; }
 
-    [JsonIgnore]
-    public List<Pokemon> Pokemons { get; set; } = new List<Pokemon>();
+    public List<PokemonDto> Pokemons { get; set; } = new List<PokemonDto>();
 
-    [JsonIgnore]
-    public List<HunterPokemon> Caughts { get; set; } = new List<HunterPokemon>();
+    public List<HunterPokemonDto> Caughts { get; set; } = new List<HunterPokemonDto>();
     
-    public int CityId { get; set; }
+    public int? CityId { get; set; }
 
-    [JsonIgnore]
-    public City City { get; set; }
-
-    [JsonIgnore]
-    public HunterLicense HunterLicense { get; set; }
+    public CityDto? City { get; set; }
+    public HunterLicenseDto HunterLicense { get; set; }
 }
 
-public class HunterConfiguration : IEntityTypeConfiguration<Hunter>
+public class HunterConfiguration : IEntityTypeConfiguration<HunterDto>
 {
-    public void Configure(EntityTypeBuilder<Hunter> builder)
+    public void Configure(EntityTypeBuilder<HunterDto> builder)
     {
         builder.Property(f => f.Id)
                .ValueGeneratedOnAdd();
 
         builder.HasMany(c => c.Pokemons)
                .WithMany(s => s.Hunters)
-               .UsingEntity<HunterPokemon>(
+               .UsingEntity<HunterPokemonDto>(
                     t => t
                         .HasOne(c => c.Pokemon)
                         .WithMany(p => p.Caughts)
@@ -51,7 +46,7 @@ public class HunterConfiguration : IEntityTypeConfiguration<Hunter>
 
         builder.HasOne(c => c.HunterLicense)
                .WithOne(s => s.Hunter)
-               .HasForeignKey<HunterLicense>(hl => hl.HunterId);
+               .HasForeignKey<HunterLicenseDto>(hl => hl.HunterId);
 
     }
 }

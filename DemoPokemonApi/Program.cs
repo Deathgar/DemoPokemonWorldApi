@@ -16,6 +16,8 @@ builder.Services.ConfigureCors();
 builder.Services.ConfigureRepositoryWrapper();
 builder.Services.ConfigureServices();
 
+builder.Services.AddAutoMapper(typeof(ModelMapper));
+
 
 //TODO Ask about best solution for cycles
 builder.Services.AddControllers();
@@ -42,9 +44,9 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 using (var context = scope.ServiceProvider.GetService<PokemonWorldContext>())
 {
-    context.Database.EnsureDeleted();
-    context.Database.EnsureCreated();
-    DataSeeder.FillTestData(context);
+    //context.Database.EnsureDeleted();
+    //context.Database.EnsureCreated();
+    //DataSeeder.FillTestData(context);
 
     // Uncomment line below to seed with random data
     //DataSeeder.OtherTestData(context);

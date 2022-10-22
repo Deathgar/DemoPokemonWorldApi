@@ -4,22 +4,20 @@ using System.Text.Json.Serialization;
 
 namespace DemoPokemonApi.Models;
 
-public class City
+public class CityDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
 
-    [JsonIgnore]
-    public List<Hunter> Hunters { get; set; } = new List<Hunter>();
+    public List<HunterDto> Hunters { get; set; } = new List<HunterDto>();
 
     public int CountryId { get; set; }
-    [JsonIgnore]
-    public Country Country { get; set; }
+    public CountryDto Country { get; set; }
 }
 
-public class CityConfiguration : IEntityTypeConfiguration<City>
+public class CityConfiguration : IEntityTypeConfiguration<CityDto>
 {
-    public void Configure(EntityTypeBuilder<City> builder)
+    public void Configure(EntityTypeBuilder<CityDto> builder)
     {
         builder.Property(f => f.Id)
                .ValueGeneratedOnAdd();

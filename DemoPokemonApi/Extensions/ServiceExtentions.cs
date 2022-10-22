@@ -1,7 +1,7 @@
-﻿using DemoPokemonApi.Repositories;
-using DemoPokemonApi.Repositories.Interfaces;
-using DemoPokemonApi.Services;
+﻿using DemoPokemonApi.Services;
 using DemoPokemonApi.Services.Interfaces;
+using DemoPokemonApi.Wrappers;
+using DemoPokemonApi.Wrappers.Interfaces;
 
 namespace DemoPokemonApi.Extensions;
 
@@ -21,6 +21,7 @@ public static class ServiceExtentions
     public static void ConfigureRepositoryWrapper(this IServiceCollection services)
     {
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+        services.AddScoped<IServiceWrapper, ServiceWrapper>();
     }
 
     public static void ConfigureServices(this IServiceCollection services)

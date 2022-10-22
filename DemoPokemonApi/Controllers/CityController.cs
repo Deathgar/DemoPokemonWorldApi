@@ -1,5 +1,7 @@
 ﻿using DemoPokemonApi.Models;
 using DemoPokemonApi.Services.Interfaces;
+using DemoPokemonApi.ViewModels;
+using DemoPokemonApi.Wrappers.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,35 +13,48 @@ public class CityController : ControllerBase
 {
     private ICityService _cityService;
 
-    public CityController(ICityService cityService)
+    public CityController(IServiceWrapper serviceWrapper)
     {
-        _cityService = cityService;
+        _cityService = serviceWrapper.CityService;
     }
 
     [HttpGet]
-    public async Task<IEnumerable<City>> Get()
+    public async Task<IEnumerable<CityViewModel>> Get()
     {
-        return await _cityService.GetCitiesAsync();
+        return await _cityService.GetAsync();
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<City> Get(int id)
+    public async Task<CityViewModel> Get(int id)
     {
-        return await _cityService.GetCityAsync(id);
+        return await _cityService.GetAsync(id);
     }
 
-    [HttpPost]
-    [Route("createCity")]
-    public async Task Create([FromBody] City city)
+    [HttpPut]
+    [Route("updateCity")]
+    public async Task<ActionResult> Update([FromBody] CityViewModel city)
     {
-        await _cityService.CreateCityAsync(city);
+        bool isSuccess = await _cityService.UpdateAsync(city);
+
+        return isSuccess ? new OkResult() : new BadRequestResult();
+    }
+
+    [HttpDelete]
+    [Route("deleteCity/{cityId}")]
+    public async Task<ActionResult> Delete(int cityId)
+    {
+        bool isSuccess = await _cityService.DeleteAsync(cityId);
+
+        return isSuccess ? new OkResult() : new BadRequestResult();
     }
 
     [HttpPost]
     [Route("addHunter/{cityId}")]
-    public async Task AddHunter(int cityId, [FromBody] Hunter hunter)
+    public async Task<ActionResult> AddHunter(int cityId, [FromBody] HunterDto hunter)
     {
-        await _cityService.AddHunterToCityAsync(cityId, hunter);
+        bool isSuccess = await _cityService.AddHunterToCityAsync(cityId, hunter);
+
+        return isSuccess ? new OkResult() : new BadRequestResult();
     }
 }

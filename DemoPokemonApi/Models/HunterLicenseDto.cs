@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace DemoPokemonApi.Models;
 
-public class HunterLicense
+public class HunterLicenseDto
 {
     public int Id { get; set; }
     public bool IsAvailable { get; set; }
@@ -12,13 +12,12 @@ public class HunterLicense
 
     public int HunterId { get; set; }
 
-    [JsonIgnore]
-    public Hunter Hunter { get; set; }
+    public HunterDto Hunter { get; set; }
 }
 
-public class HunterLicenseConfiguration : IEntityTypeConfiguration<HunterLicense>
+public class HunterLicenseConfiguration : IEntityTypeConfiguration<HunterLicenseDto>
 {
-    public void Configure(EntityTypeBuilder<HunterLicense> builder)
+    public void Configure(EntityTypeBuilder<HunterLicenseDto> builder)
     {
         builder.Property(f => f.Id)
                .ValueGeneratedOnAdd();

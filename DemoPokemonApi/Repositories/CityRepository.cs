@@ -6,48 +6,25 @@ using System.Linq.Expressions;
 
 namespace DemoPokemonApi.Repositories;
 
-public class CityRepository : BaseRepository<City>, ICityRepository
+public class CityRepository : BaseRepository<CityDto>, ICityRepository
 {
     public CityRepository(PokemonWorldContext pokemonWorldContext) : base(pokemonWorldContext)
     {
     }
 
-    public async Task<IEnumerable<City>> GetAllAsync(bool isInclude = true)
+    public async Task<CityDto> GetByIdAsync(int id)
     {
-        if (isInclude)
-        {
-            return await GetAll().Include(x => x.Country)
-                                  .Include(x => x.Hunters)
-                                  .ToListAsync();
-        }
-
-        return await GetAll().ToListAsync();
-    }
-
-    public async Task<IEnumerable<City>> GetByConditionAsync(Expression<Func<City, bool>> expression, bool isInclude = true)
-    {
-        if (isInclude)
-        {
-            return await GetByCondition(expression).Include(x => x.Country)
-                                                    .Include(x => x.Hunters)
-                                                    .ToListAsync();
-        }
-
-        return await GetByCondition(expression).ToListAsync();
-    }
-
-    public async Task<City> GetByIdAsync(int id, bool isInclude = true)
-    {
-        if (isInclude)
-        {
-            return await GetByCondition(x => x.Id == id).Include(x => x.Country)
-                                                         .Include(x => x.Hunters)
-                                                         .ThenInclude(y => y.HunterLicense)
-                                                         .Include(x => x.Hunters)
-                                                         .ThenInclude(y => y.Pokemons)
-                                                         .FirstOrDefaultAsync();
-        }
-
         return await GetByCondition(x => x.Id == id).FirstOrDefaultAsync();
+    }
+
+    public async Task CreateAsync(CityDto entity)
+    {
+        var country = await PokemonWorldContext.Countries.FirstOrDefaultAsync(x => x.Id == entity.CountryId);
+
+        if (country == null)
+            return;
+
+        entity.Country = country;
+        Create(entity);
     }
 }

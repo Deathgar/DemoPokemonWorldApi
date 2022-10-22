@@ -19,10 +19,10 @@ public class PokemonWorldContext : DbContext
         modelBuilder.ApplyConfiguration(new HunterLicenseConfiguration());
     }
 
-    public DbSet<Country> Countries { get; set; }
-    public DbSet<Habitat> Habitats { get; set; }
-    public DbSet<City> Cities { get; set; }
-    public DbSet<Hunter> Hunters { get; set; }
-    public DbSet<HunterLicense> HunterLicenses { get; set; }
-    public DbSet<Pokemon> Pokemons { get; set; }
+    public DbSet<CountryDto> Countries { get; set; }
+    public DbSet<HabitatDto> Habitats { get; set; }
+    public DbSet<CityDto> Cities { get; set; }
+    public DbSet<HunterDto> Hunters { get; set; }
+    public DbSet<HunterLicenseDto> HunterLicenses { get; set; }
+    public DbSet<PokemonDto> Pokemons { get; set; }
 }

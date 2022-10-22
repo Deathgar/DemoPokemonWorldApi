@@ -3,22 +3,22 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DemoPokemonApi.Models;
 
-public class HunterPokemon
+public class HunterPokemonDto
 {
     public int Id { get; set; }
 
     public int HunterId { get; set; }
-    public Hunter Hunter {get;set;}
+    public HunterDto Hunter {get;set;}
 
     public int PokemonId { get; set; }
-    public Pokemon Pokemon { get; set; }
+    public PokemonDto Pokemon { get; set; }
 
     public DateTime CatchDate { get; set; }
 }
 
-public class CaughtConfiguration : IEntityTypeConfiguration<HunterPokemon>
+public class CaughtConfiguration : IEntityTypeConfiguration<HunterPokemonDto>
 {
-    public void Configure(EntityTypeBuilder<HunterPokemon> builder)
+    public void Configure(EntityTypeBuilder<HunterPokemonDto> builder)
     {
         builder.Property(f => f.Id)
                .ValueGeneratedOnAdd();

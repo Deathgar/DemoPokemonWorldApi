@@ -1,9 +1,11 @@
-﻿namespace DemoPokemonApi.Repositories.Interfaces;
+﻿using DemoPokemonApi.Repositories.Interfaces;
+
+namespace DemoPokemonApi.Wrappers.Interfaces;
 
 public interface IRepositoryWrapper
 {
     ICountryRepository CountryRepository { get; }
-    ICityRepository City { get; }
+    ICityRepository CityRepository { get; }
     IHabitatRepository HabitatRepository { get; }
     IHunterRepository HunterRepository { get; }
     IPokemonRepository PokemonRepository { get; }

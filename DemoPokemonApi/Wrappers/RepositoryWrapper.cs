@@ -1,7 +1,9 @@
 ﻿using DemoPokemonApi.Data;
+using DemoPokemonApi.Repositories;
 using DemoPokemonApi.Repositories.Interfaces;
+using DemoPokemonApi.Wrappers.Interfaces;
 
-namespace DemoPokemonApi.Repositories
+namespace DemoPokemonApi.Wrappers
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {
@@ -31,7 +33,7 @@ namespace DemoPokemonApi.Repositories
             }
         }
 
-        public ICityRepository City
+        public ICityRepository CityRepository
         {
             get
             {

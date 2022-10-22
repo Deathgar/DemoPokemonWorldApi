@@ -4,20 +4,18 @@ using System.Text.Json.Serialization;
 
 namespace DemoPokemonApi.Models;
 
-public class Habitat
+public class HabitatDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
 
-    [JsonIgnore]
-    public List<Country> Countries { get; set; } = new List<Country>();
-    [JsonIgnore]
-    public List<Pokemon> Pokemons { get; set; } = new List<Pokemon>();
+    public List<CountryDto> Countries { get; set; } = new List<CountryDto>();
+    public List<PokemonDto> Pokemons { get; set; } = new List<PokemonDto>();
 }
 
-public class HabitatConfiguration : IEntityTypeConfiguration<Habitat>
+public class HabitatConfiguration : IEntityTypeConfiguration<HabitatDto>
 {
-    public void Configure(EntityTypeBuilder<Habitat> builder)
+    public void Configure(EntityTypeBuilder<HabitatDto> builder)
     {
         builder.Property(f => f.Id)
                .ValueGeneratedOnAdd();
