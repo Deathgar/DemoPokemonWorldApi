@@ -53,7 +53,7 @@ public class ServiceWrapper : IServiceWrapper
         {
             if (_habitatService == null)
             {
-                //_habitatService = new HabitatService(_mapper, _repositoryWrapper);
+                _habitatService = new HabitatService(_mapper, _repositoryWrapper);
             }
             return _habitatService;
         }
@@ -65,7 +65,7 @@ public class ServiceWrapper : IServiceWrapper
         {
             if (_hunterService == null)
             {
-                //_hunterService = new HunterService(_mapper, _repositoryWrapper);
+                _hunterService = new HunterService(_mapper, _repositoryWrapper);
             }
             return _hunterService;
         }
@@ -77,7 +77,7 @@ public class ServiceWrapper : IServiceWrapper
         {
             if (_pokemonService == null)
             {
-                //_pokemonService = new PokemonService(_mapper, _repositoryWrapper);
+                _pokemonService = new PokemonService(_mapper, _repositoryWrapper);
             }
             return _pokemonService;
         }
@@ -89,7 +89,7 @@ public class ServiceWrapper : IServiceWrapper
         {
             if (_hunterLicenseService == null)
             {
-                //_hunterLicenseService = new HunterLicenseService(_mapper, _repositoryWrapper);
+                _hunterLicenseService = new HunterLicenseService(_mapper, _repositoryWrapper);
             }
             return _hunterLicenseService;
         }

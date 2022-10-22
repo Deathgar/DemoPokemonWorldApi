@@ -32,19 +32,19 @@ public class CityController : ControllerBase
     }
 
     [HttpPut]
-    [Route("updateCity")]
-    public async Task<ActionResult> Update([FromBody] CityViewModel city)
+    [Route("update")]
+    public async Task<ActionResult> Update([FromBody] CityViewModel vm)
     {
-        bool isSuccess = await _cityService.UpdateAsync(city);
+        bool isSuccess = await _cityService.UpdateAsync(vm);
 
         return isSuccess ? new OkResult() : new BadRequestResult();
     }
 
     [HttpDelete]
-    [Route("deleteCity/{cityId}")]
-    public async Task<ActionResult> Delete(int cityId)
+    [Route("update/{id}")]
+    public async Task<ActionResult> Delete(int id)
     {
-        bool isSuccess = await _cityService.DeleteAsync(cityId);
+        bool isSuccess = await _cityService.DeleteAsync(id);
 
         return isSuccess ? new OkResult() : new BadRequestResult();
     }
