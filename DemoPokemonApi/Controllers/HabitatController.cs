@@ -39,7 +39,7 @@ public class HabitatController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("update/{id}")]
+    [Route("delete/{id}")]
     public async Task<ActionResult> Delete(int id)
     {
         bool isSuccess = await _habitatService.DeleteAsync(id);
