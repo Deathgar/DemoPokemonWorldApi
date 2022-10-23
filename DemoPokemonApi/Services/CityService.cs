@@ -74,14 +74,27 @@ public class CityService : ICityService
         return result != 0;
     }
 
-    public async Task<bool> AddHunterToCityAsync(int cityId, HunterDto hunter)
+    public async Task<IEnumerable<HunterViewModel>> GetHuntersByCityAsync(int cityId)
     {
-        var city = await _repositoryWrapper.CityRepository.GetByIdAsync(cityId);
+        bool isCityExist = await _repositoryWrapper.CityRepository.Exist(cityId);
 
-        city.Hunters.Add(hunter);
-        _repositoryWrapper.CityRepository.Update(city);
+        if (!isCityExist)
+            return Enumerable.Empty<HunterViewModel>();
 
-        int result = await _repositoryWrapper.SaveAsync();
-        return result != 0;
+        var hunterDtos = await _repositoryWrapper.CityRepository.GetHuntersByCityAsync(cityId);
+
+        return _mapper.Map<IEnumerable<HunterViewModel>>(hunterDtos);
+    }
+
+    public async Task<CountryViewModel> GetCountryByCityAsync(int cityId)
+    {
+        bool isCityExist = await _repositoryWrapper.CityRepository.Exist(cityId);
+
+        if (!isCityExist)
+            return null;
+
+        var countryDto = await _repositoryWrapper.CityRepository.GetCountryByCityAsync(cityId);
+
+        return _mapper.Map<CountryViewModel>(countryDto);
     }
 }

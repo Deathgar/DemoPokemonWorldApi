@@ -56,12 +56,17 @@ public class CityController : ControllerBase
         return isSuccess ? new OkResult() : new BadRequestResult();
     }
 
-    [HttpPost]
-    [Route("addHunter/{cityId}")]
-    public async Task<ActionResult> AddHunter(int cityId, [FromBody] HunterDto hunter)
+    [HttpGet]
+    [Route("getHunters/{cityId}")]
+    public async Task<IEnumerable<HunterViewModel>> GetCities(int cityId)
     {
-        bool isSuccess = await _cityService.AddHunterToCityAsync(cityId, hunter);
+        return await _cityService.GetHuntersByCityAsync(cityId);
+    }
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+    [HttpGet]
+    [Route("getCounty/{cityId}")]
+    public async Task<CountryViewModel> GetHabitats(int cityId)
+    {
+        return await _cityService.GetCountryByCityAsync(cityId);
     }
 }
