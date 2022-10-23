@@ -30,7 +30,6 @@ public class HunterController : ControllerBase
     }
 
     [HttpPut]
-    [Route("update")]
     public async Task<ActionResult> Update([FromBody] HunterViewModel vm)
     {
         bool isSuccess = await _hunterService.UpdateAsync(vm);
@@ -39,7 +38,7 @@ public class HunterController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("delete/{id}")]
+    [Route("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
         bool isSuccess = await _hunterService.DeleteAsync(id);

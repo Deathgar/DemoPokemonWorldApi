@@ -30,7 +30,6 @@ public class CountryController : ControllerBase
     }
 
     [HttpPut]
-    [Route("update")]
     public async Task<ActionResult> Update([FromBody] CountryViewModel vm)
     {
         bool isSuccess = await _countryService.UpdateAsync(vm);
@@ -39,7 +38,7 @@ public class CountryController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("delete/{id}")]
+    [Route("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
         bool isSuccess = await _countryService.DeleteAsync(id);

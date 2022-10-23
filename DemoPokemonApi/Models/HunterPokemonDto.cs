@@ -3,10 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DemoPokemonApi.Models;
 
-public class HunterPokemonDto
+public class HunterPokemonDto : BaseDto
 {
-    public int Id { get; set; }
-
     public int HunterId { get; set; }
     public HunterDto Hunter {get;set;}
 

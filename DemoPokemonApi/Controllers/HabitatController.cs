@@ -30,7 +30,6 @@ public class HabitatController : ControllerBase
     }
 
     [HttpPut]
-    [Route("update")]
     public async Task<ActionResult> Update([FromBody] HabitatViewModel vm)
     {
         bool isSuccess = await _habitatService.UpdateAsync(vm);
@@ -39,7 +38,7 @@ public class HabitatController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("delete/{id}")]
+    [Route("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
         bool isSuccess = await _habitatService.DeleteAsync(id);

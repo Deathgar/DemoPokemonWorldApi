@@ -12,11 +12,6 @@ public class PokemonRepository : BaseRepository<PokemonDto>, IPokemonRepository
     {
     }
 
-    public Task CreateAsync(PokemonDto entity)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<PokemonDto> GetByIdAsync(int id)
     {
         return await GetByCondition(x => x.Id == id).FirstOrDefaultAsync();

@@ -37,7 +37,6 @@ public class HunterLicenseController : ControllerBase
     }
 
     [HttpPut]
-    [Route("update")]
     public async Task<ActionResult> Update([FromBody] HunterLicenseViewModel vm)
     {
         bool isSuccess = await _hunterLicenseService.UpdateAsync(vm);

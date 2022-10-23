@@ -1,11 +1,12 @@
 ﻿using DemoPokemonApi.Data;
+using DemoPokemonApi.Models;
 using DemoPokemonApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace DemoPokemonApi.Repositories;
 
-public class BaseRepository<T> : IBaseRepository<T> where T : class
+public class BaseRepository<T> : IBaseRepository<T> where T : BaseDto
 {
     protected PokemonWorldContext PokemonWorldContext { get; set; }
     public BaseRepository(PokemonWorldContext pokemonWorldContext)
@@ -19,6 +20,8 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         PokemonWorldContext.Set<T>().Where(expression).AsNoTracking();
     public async Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> expression) =>
         await PokemonWorldContext.Set<T>().Where(expression).AsNoTracking().ToListAsync();
+
+    public async Task<bool> Exist(int id) => await PokemonWorldContext.Set<T>().AnyAsync(x => x.Id == id);
 
     public void Create(T entity) => PokemonWorldContext.Set<T>().Add(entity);
     public void Update(T entity) => PokemonWorldContext.Set<T>().Update(entity);

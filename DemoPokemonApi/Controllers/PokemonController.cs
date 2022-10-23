@@ -29,8 +29,15 @@ public class PokemonController : ControllerBase
         return await _pokemonService.GetAsync(id);
     }
 
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] PokemonViewModel vm)
+    {
+        bool isSuccess = await _pokemonService.CreateAsync(vm);
+
+        return isSuccess ? new OkResult() : new BadRequestResult();
+    }
+
     [HttpPut]
-    [Route("update")]
     public async Task<ActionResult> Update([FromBody] PokemonViewModel vm)
     {
         bool isSuccess = await _pokemonService.UpdateAsync(vm);
@@ -39,7 +46,7 @@ public class PokemonController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("delete/{id}")]
+    [Route("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
         bool isSuccess = await _pokemonService.DeleteAsync(id);

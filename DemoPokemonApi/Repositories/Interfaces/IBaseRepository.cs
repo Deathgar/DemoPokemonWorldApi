@@ -8,6 +8,7 @@ namespace DemoPokemonApi.Repositories.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
         IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression);
         Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> expression);
+        Task<bool> Exist(int id);
         void Create(T entity);
         void Update(T entity);
         void Delete(T entity);

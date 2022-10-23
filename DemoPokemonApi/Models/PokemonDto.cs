@@ -4,9 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace DemoPokemonApi.Models;
 
-public class PokemonDto
+public class PokemonDto : BaseDto
 {
-    public int Id { get; set; }
     public string Name { get; set; }
 
     public List<HunterDto> Hunters { get; set; } = new List<HunterDto>();

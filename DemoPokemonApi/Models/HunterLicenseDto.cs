@@ -4,9 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace DemoPokemonApi.Models;
 
-public class HunterLicenseDto
+public class HunterLicenseDto : BaseDto
 {
-    public int Id { get; set; }
     public bool IsAvailable { get; set; }
     public DateTime ReceiptDate { get; set; }
 

@@ -31,9 +31,14 @@ public class PokemonService : IPokemonService
 
     public async Task<bool> CreateAsync(PokemonViewModel entity)
     {
+        var isExistHabitat = await _repositoryWrapper.HabitatRepository.Exist(entity.HabitatId);
+
+        if (!isExistHabitat)
+            return false;
+
         var dto = _mapper.Map<PokemonDto>(entity);
 
-        await _repositoryWrapper.PokemonRepository.CreateAsync(dto);
+        _repositoryWrapper.PokemonRepository.Create(dto);
 
         int result = await _repositoryWrapper.SaveAsync();
         return result != 0;

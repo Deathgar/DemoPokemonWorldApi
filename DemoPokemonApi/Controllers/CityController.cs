@@ -32,7 +32,6 @@ public class CityController : ControllerBase
     }
 
     [HttpPut]
-    [Route("update")]
     public async Task<ActionResult> Update([FromBody] CityViewModel vm)
     {
         bool isSuccess = await _cityService.UpdateAsync(vm);
@@ -41,7 +40,7 @@ public class CityController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("delete/{id}")]
+    [Route("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
         bool isSuccess = await _cityService.DeleteAsync(id);
