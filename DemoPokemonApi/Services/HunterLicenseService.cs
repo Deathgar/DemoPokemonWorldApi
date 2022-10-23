@@ -33,7 +33,7 @@ public class HunterLicenseService : IHunterLicenseService
     {
         var dto = _mapper.Map<HunterLicenseDto>(entity);
 
-        await _repositoryWrapper.HunterLicenseRepository.CreateAsync(dto);
+        _repositoryWrapper.HunterLicenseRepository.Create(dto);
 
         int result = await _repositoryWrapper.SaveAsync();
         return result != 0;
@@ -61,11 +61,5 @@ public class HunterLicenseService : IHunterLicenseService
         }
 
         return result != 0;
-    }
-
-    public async Task<HunterLicenseViewModel> GetByHunterIdAsync(int hunterId)
-    {
-        var dto = await _repositoryWrapper.HunterLicenseRepository.GetByConditionAsync(x => x.HunterId == hunterId);
-        return dto.Any() ? _mapper.Map<HunterLicenseViewModel>(dto.ElementAt(0)) : null;
     }
 }

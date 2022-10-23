@@ -29,6 +29,14 @@ public class HunterController : ControllerBase
         return await _hunterService.GetAsync(id);
     }
 
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] HunterViewModel vm)
+    {
+        bool isSuccess = await _hunterService.CreateAsync(vm);
+
+        return isSuccess ? new OkResult() : new BadRequestResult();
+    }
+
     [HttpPut]
     public async Task<ActionResult> Update([FromBody] HunterViewModel vm)
     {
@@ -44,5 +52,19 @@ public class HunterController : ControllerBase
         bool isSuccess = await _hunterService.DeleteAsync(id);
 
         return isSuccess ? new OkResult() : new BadRequestResult();
+    }
+
+    [HttpGet]
+    [Route("getCity/{hunterId}")]
+    public async Task<CityViewModel> GetCities(int hunterId)
+    {
+        return await _hunterService.GetCityByHunterAsync(hunterId);
+    }
+
+    [HttpGet]
+    [Route("getPokemons/{hunterId}")]
+    public async Task<IEnumerable<PokemonViewModel>> GetHabitats(int hunterId)
+    {
+        return await _hunterService.GetPokemonsByHunterAsync(hunterId);
     }
 }

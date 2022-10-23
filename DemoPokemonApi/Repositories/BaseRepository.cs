@@ -2,6 +2,7 @@
 using DemoPokemonApi.Models;
 using DemoPokemonApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
 
 namespace DemoPokemonApi.Repositories;
@@ -23,7 +24,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseDto
 
     public async Task<bool> Exist(int id) => await PokemonWorldContext.Set<T>().AnyAsync(x => x.Id == id);
 
-    public void Create(T entity) => PokemonWorldContext.Set<T>().Add(entity);
+    public T Create(T entity) => PokemonWorldContext.Set<T>().Add(entity).Entity;
     public void Update(T entity) => PokemonWorldContext.Set<T>().Update(entity);
     public void Delete(T entity) => PokemonWorldContext.Set<T>().Remove(entity);
 }

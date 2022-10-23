@@ -5,7 +5,5 @@
         public int Id { get; set; }
         public bool IsAvailable { get; set; }
         public DateTime ReceiptDate { get; set; }
-
-        public int HunterId { get; set; }
     }
 }

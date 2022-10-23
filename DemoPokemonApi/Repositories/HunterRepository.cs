@@ -12,13 +12,22 @@ public class HunterRepository : BaseRepository<HunterDto>, IHunterRepository
     {
     }
 
-    public Task CreateAsync(HunterDto entity)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<HunterDto> GetByIdAsync(int id)
     {
         return await GetByCondition(x => x.Id == id).FirstOrDefaultAsync();
+    }
+
+    public async Task<CityDto> GetCityByHunterAsync(int hunterId)
+    {
+        var hunter = await PokemonWorldContext.Set<HunterDto>().Include(x => x.City).FirstOrDefaultAsync(x => x.Id == hunterId);
+
+        return hunter?.City;
+    }
+
+    public async Task<IEnumerable<PokemonDto>> GetPokemonsByHunterAsync(int hunterId)
+    {
+        var hunter = await PokemonWorldContext.Set<HunterDto>().Include(x => x.Pokemons).FirstOrDefaultAsync(x => x.Id == hunterId);
+
+        return hunter != null ? hunter.Pokemons : Enumerable.Empty<PokemonDto>();
     }
 }

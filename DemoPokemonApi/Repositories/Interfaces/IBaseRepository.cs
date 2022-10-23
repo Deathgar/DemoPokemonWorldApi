@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq.Expressions;
 
 namespace DemoPokemonApi.Repositories.Interfaces
 {
@@ -9,7 +10,7 @@ namespace DemoPokemonApi.Repositories.Interfaces
         IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression);
         Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> expression);
         Task<bool> Exist(int id);
-        void Create(T entity);
+        T Create(T entity);
         void Update(T entity);
         void Delete(T entity);
     }

@@ -12,11 +12,6 @@ public class HunterLicenseRepository : BaseRepository<HunterLicenseDto>, IHunter
     {
     }
 
-    public Task CreateAsync(HunterLicenseDto entity)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<HunterLicenseDto> GetByIdAsync(int id)
     {
         return await GetByCondition(x => x.Id == id).FirstOrDefaultAsync();

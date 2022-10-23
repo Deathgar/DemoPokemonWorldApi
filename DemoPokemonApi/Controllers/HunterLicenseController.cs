@@ -29,13 +29,6 @@ public class HunterLicenseController : ControllerBase
         return await _hunterLicenseService.GetAsync(id);
     }
 
-    [HttpGet]
-    [Route("getByHunter/{hunterId}")]
-    public async Task<HunterLicenseViewModel> GetByHunterId(int hunterId)
-    {
-        return await _hunterLicenseService.GetByHunterIdAsync(hunterId);
-    }
-
     [HttpPut]
     public async Task<ActionResult> Update([FromBody] HunterLicenseViewModel vm)
     {
