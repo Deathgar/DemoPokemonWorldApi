@@ -41,6 +41,11 @@ namespace DemoPokemonApi.Services
 
         public async Task<bool> UpdateAsync(CountryViewModel entity)
         {
+            bool isCountryExist = await _repositoryWrapper.CountryRepository.Exist(entity.Id);
+
+            if (!isCountryExist)
+                return false;
+
             var dto = _mapper.Map<CountryDto>(entity);
 
             _repositoryWrapper.CountryRepository.Update(dto);
