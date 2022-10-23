@@ -31,6 +31,14 @@ public class CityController : ControllerBase
         return await _cityService.GetAsync(id);
     }
 
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] CityViewModel vm)
+    {
+        bool isSuccess = await _cityService.CreateAsync(vm);
+
+        return isSuccess ? new OkResult() : new BadRequestResult();
+    }
+
     [HttpPut]
     public async Task<ActionResult> Update([FromBody] CityViewModel vm)
     {

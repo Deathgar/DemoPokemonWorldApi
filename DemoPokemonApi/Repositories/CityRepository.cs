@@ -16,15 +16,4 @@ public class CityRepository : BaseRepository<CityDto>, ICityRepository
     {
         return await GetByCondition(x => x.Id == id).FirstOrDefaultAsync();
     }
-
-    public async Task CreateAsync(CityDto entity)
-    {
-        var country = await PokemonWorldContext.Countries.FirstOrDefaultAsync(x => x.Id == entity.CountryId);
-
-        if (country == null)
-            return;
-
-        entity.Country = country;
-        Create(entity);
-    }
 }
