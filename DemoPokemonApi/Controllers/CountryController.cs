@@ -29,6 +29,14 @@ public class CountryController : ControllerBase
         return await _countryService.GetAsync(id);
     }
 
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] CountryViewModel vm)
+    {
+        bool isSuccess = await _countryService.CreateAsync(vm);
+
+        return isSuccess ? new OkResult() : new BadRequestResult();
+    }
+
     [HttpPut]
     public async Task<ActionResult> Update([FromBody] CountryViewModel vm)
     {
@@ -44,5 +52,19 @@ public class CountryController : ControllerBase
         bool isSuccess = await _countryService.DeleteAsync(id);
 
         return isSuccess ? new OkResult() : new BadRequestResult();
+    }
+
+    [HttpGet]
+    [Route("getCities/{countryId}")]
+    public async Task<IEnumerable<CityViewModel>> GetCities(int countryId)
+    {
+        return await _countryService.GetCitiesByCoutryAsync(countryId);
+    }
+
+    [HttpGet]
+    [Route("getHabitats/{countryId}")]
+    public async Task<IEnumerable<HabitatViewModel>> GetHabitats(int countryId)
+    {
+        return await _countryService.GetHabitatsByCoutryAsync(countryId);
     }
 }

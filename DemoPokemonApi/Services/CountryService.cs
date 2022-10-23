@@ -33,7 +33,7 @@ namespace DemoPokemonApi.Services
         {
             var dto = _mapper.Map<CountryDto>(entity);
 
-            await _repositoryWrapper.CountryRepository.CreateAsync(dto);
+            _repositoryWrapper.CountryRepository.Create(dto);
 
             int result = await _repositoryWrapper.SaveAsync();
             return result != 0;
@@ -61,6 +61,35 @@ namespace DemoPokemonApi.Services
             }
 
             return result != 0;
+        }
+
+        public async Task<IEnumerable<CityViewModel>> GetCitiesByCoutryAsync(int countryId)
+        {
+            bool isCountryExist = await _repositoryWrapper.CountryRepository.Exist(countryId);
+
+            if(!isCountryExist)
+            {
+                return Enumerable.Empty<CityViewModel>();
+            }
+
+            var cityDtos = await _repositoryWrapper.CountryRepository.GetCitiesByCountryAsync(countryId);
+
+            return _mapper.Map<IEnumerable<CityViewModel>>(cityDtos);
+
+        }
+
+        public async Task<IEnumerable<HabitatViewModel>> GetHabitatsByCoutryAsync(int countryId)
+        {
+            bool isCountryExist = await _repositoryWrapper.CountryRepository.Exist(countryId);
+
+            if (!isCountryExist)
+            {
+                return Enumerable.Empty<HabitatViewModel>();
+            }
+
+            var habitatDtos = await _repositoryWrapper.CountryRepository.GetHabitatsByCountryAsync(countryId);
+
+            return _mapper.Map<IEnumerable<HabitatViewModel>>(habitatDtos);
         }
     }
 }
