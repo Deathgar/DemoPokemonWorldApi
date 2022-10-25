@@ -55,13 +55,16 @@ public class TestContext
     private void InitDatabase()
     {
         DbContextOptions = new DbContextOptionsBuilder<PokemonWorldContext>()
-            .UseInMemoryDatabase(databaseName: "PokemonWorldDb")
+            .UseInMemoryDatabase(databaseName: "PokemonWorldDb_ControllersTest")
             .Options;
 
         // Insert seed data into the database using one instance of the context
         using (var context = new PokemonWorldContext(DbContextOptions))
         {
-            DataSeeder.FillTestData(context);
+            if (context.Database.EnsureCreated())
+            {
+                DataSeeder.FillTestData(context);
+            }
         }
     }
 
