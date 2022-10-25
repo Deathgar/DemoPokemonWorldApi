@@ -235,5 +235,43 @@ namespace TestDemoPokemonApi.Controllers
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
             testContext.CityService.Verify(x => x.GetHuntersAsync(cityId));
         }
+
+        [Test]
+        public async static Task SuccessfulGettingCountryByCity()
+        {
+            int cityId = SharedData.GoodCityId;
+
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CityPathUrl + SharedData.CityCountryPathUrl + cityId);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            testContext.CityService.Verify(x => x.GetCountryAsync(cityId));
+
+            var content = await response.Content.ReadAsStringAsync();
+            var country = JsonConvert.DeserializeObject<CountryViewModel>(content);
+
+            Assert.IsNotNull(country);
+
+            using (var context = new PokemonWorldContext(testContext.DbContextOptions))
+            {
+                Assert.That(country.Id, Is.EqualTo(context.Cities.Include(x => x.Country).First(x => x.Id == cityId).Country.Id));
+            }
+        }
+
+        [Test]
+        public async static Task FailureGettingCountryByCity()
+        {
+            int cityId = SharedData.BadCityId;
+
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CityPathUrl + SharedData.CityCountryPathUrl + cityId);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            testContext.CityService.Verify(x => x.GetCountryAsync(cityId));
+        }
     }
 }
