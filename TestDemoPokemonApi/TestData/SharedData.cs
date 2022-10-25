@@ -61,5 +61,8 @@ namespace TestDemoPokemonApi.TestData
 
         public readonly static int GoodHabitatId = 1;
         public readonly static int BadHabitatId = 99999;
+
+        public readonly static int GoodHunterId = 1;
+        public readonly static int BadHunterId = 99999;
     }
 }

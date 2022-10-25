@@ -172,16 +172,16 @@ public class TestContext
 
     private void ConfigureHunterMock()
     {
-        HunterService.Setup(x => x.CreateAsync(It.IsAny<HunterViewModel>())).ReturnsAsync(true);
-        HunterService.Setup(x => x.UpdateAsync(It.IsAny<HunterViewModel>())).ReturnsAsync(true);
-        HunterService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync(true);
-
         var hunters = new List<HunterDto>();
 
         using (var context = new PokemonWorldContext(DbContextOptions))
         {
             hunters = context.Hunters.Include(x => x.City).Include(x => x.Pokemons).Include(x => x.HunterLicense).ToList();
         }
+
+        HunterService.Setup(x => x.CreateAsync(It.IsAny<HunterViewModel>())).ReturnsAsync(true);
+        HunterService.Setup(x => x.UpdateAsync(It.IsAny<HunterViewModel>())).ReturnsAsync((HunterViewModel x) => hunters.Any(y => y.Id == x.Id));
+        HunterService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => hunters.Any(y => y.Id == id));
 
         HunterService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HunterViewModel>(hunters.FirstOrDefault(x => x.Id == id)));
         HunterService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HunterViewModel>>(hunters.ToList()));       
