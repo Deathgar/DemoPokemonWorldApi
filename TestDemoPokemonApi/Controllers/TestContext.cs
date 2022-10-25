@@ -143,16 +143,16 @@ public class TestContext
 
     private void ConfigureHabitatMock()
     {
-        HabitatService.Setup(x => x.CreateAsync(It.IsAny<HabitatViewModel>())).ReturnsAsync(true);
-        HabitatService.Setup(x => x.UpdateAsync(It.IsAny<HabitatViewModel>())).ReturnsAsync(true);
-        HabitatService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync(true);
-
         var habitats = new List<HabitatDto>();
 
         using (var context = new PokemonWorldContext(DbContextOptions))
         {
             habitats = context.Habitats.Include(x => x.Countries).Include(x => x.Pokemons).ToList();
         }
+
+        HabitatService.Setup(x => x.CreateAsync(It.IsAny<HabitatViewModel>())).ReturnsAsync(true);
+        HabitatService.Setup(x => x.UpdateAsync(It.IsAny<HabitatViewModel>())).ReturnsAsync((HabitatViewModel x) => habitats.Any(y => y.Id == x.Id));
+        HabitatService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => habitats.Any(y => y.Id == id));
 
         HabitatService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HabitatViewModel>(habitats.FirstOrDefault(x => x.Id == id)));
         HabitatService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HabitatViewModel>>(habitats.ToList()));

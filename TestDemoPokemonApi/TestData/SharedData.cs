@@ -58,5 +58,8 @@ namespace TestDemoPokemonApi.TestData
 
         public readonly static int GoodCountryId = 1;
         public readonly static int BadCountryId = 99999;
+
+        public readonly static int GoodHabitatId = 1;
+        public readonly static int BadHabitatId = 99999;
     }
 }
