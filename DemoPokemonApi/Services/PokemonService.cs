@@ -47,6 +47,11 @@ public class PokemonService : IPokemonService
 
     public async Task<bool> UpdateAsync(PokemonViewModel entity)
     {
+        if(!await _repositoryWrapper.HabitatRepository.Exist(entity.HabitatId)) 
+        {
+            return false;
+        }
+
         var dto = _mapper.Map<PokemonDto>(entity);
 
         _repositoryWrapper.PokemonRepository.Update(dto);

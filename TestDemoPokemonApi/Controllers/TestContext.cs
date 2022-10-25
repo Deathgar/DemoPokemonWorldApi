@@ -127,7 +127,7 @@ public class TestContext
         }
 
         CityService.Setup(x => x.CreateAsync(It.IsAny<CityViewModel>())).ReturnsAsync((CityViewModel x) => countries.Any(y => y.Id == x.CountryId));
-        CityService.Setup(x => x.UpdateAsync(It.IsAny<CityViewModel>())).ReturnsAsync((CityViewModel x) => cities.Any(y => y.Id == x.Id));
+        CityService.Setup(x => x.UpdateAsync(It.IsAny<CityViewModel>())).ReturnsAsync((CityViewModel x) => cities.Any(y => y.Id == x.Id) && countries.Any(y => y.Id == x.CountryId));
         CityService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => cities.Any(y => y.Id == id));
 
         CityService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CityViewModel>(cities.FirstOrDefault(x => x.Id == id)));
@@ -196,16 +196,18 @@ public class TestContext
 
     private void ConfigurePokemonMock()
     {
-        PokemonService.Setup(x => x.CreateAsync(It.IsAny<PokemonViewModel>())).ReturnsAsync(true);
-        PokemonService.Setup(x => x.UpdateAsync(It.IsAny<PokemonViewModel>())).ReturnsAsync(true);
-        PokemonService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync(true);
-
         var pokemons = new List<PokemonDto>();
+        var habitats = new List<HabitatDto>();
 
         using (var context = new PokemonWorldContext(DbContextOptions))
         {
             pokemons = context.Pokemons.Include(x => x.Hunters).Include(x => x.Habitat).ToList();
+            habitats = context.Habitats.ToList();
         }
+
+        PokemonService.Setup(x => x.CreateAsync(It.IsAny<PokemonViewModel>())).ReturnsAsync((PokemonViewModel x) => habitats.Any(y => y.Id == x.HabitatId));
+        PokemonService.Setup(x => x.UpdateAsync(It.IsAny<PokemonViewModel>())).ReturnsAsync((PokemonViewModel x) => pokemons.Any(y => y.Id == x.Id) && habitats.Any(y => y.Id == x.HabitatId));
+        PokemonService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => pokemons.Any(y => y.Id == id));
 
         PokemonService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<PokemonViewModel>(pokemons.FirstOrDefault(x => x.Id == id)));
         PokemonService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<PokemonViewModel>>(pokemons.ToList()));        

@@ -170,6 +170,31 @@ namespace TestDemoPokemonApi.Controllers
         }
 
         [Test]
+        public async static Task FailureUpdatingCity_WrongCountyId()
+        {
+            int cityId = SharedData.GoodCityId;
+
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            using (var context = new PokemonWorldContext(testContext.DbContextOptions))
+            {
+                var city = context.Cities.First(x => x.Id == cityId);
+
+                city.Name = "TEST_UPDATE";
+                city.CountryId = SharedData.BadCountryId;
+
+                var serCity = JsonConvert.SerializeObject(city);
+                var requestContent = new StringContent(serCity, Encoding.UTF8, "application/json");
+
+                var response = await client.PutAsync(SharedData.BaseUrl + SharedData.CityPathUrl, requestContent);
+
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+                testContext.CityService.Verify(x => x.UpdateAsync(It.IsAny<CityViewModel>()));
+            }
+        }
+
+        [Test]
         public async static Task FailureUpdatingCity_SendNull()
         {
             int cityId = SharedData.GoodCityId;
