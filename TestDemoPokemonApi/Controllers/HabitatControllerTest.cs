@@ -38,7 +38,7 @@ namespace TestDemoPokemonApi.Controllers
         }
 
         [Test]
-        public async static Task CreateHabitat()
+        public async static Task SuccessfulCreateHabitat()
         {
             var testContext = TestContext.Create();
             var client = testContext.Client;
@@ -48,13 +48,52 @@ namespace TestDemoPokemonApi.Controllers
                 Name = "Test"
             };
 
-            var serCountry = JsonConvert.SerializeObject(habitat);
-            var requestContent = new StringContent(serCountry, Encoding.UTF8, "application/json");
+            var serhabitat = JsonConvert.SerializeObject(habitat);
+            var requestContent = new StringContent(serhabitat, Encoding.UTF8, "application/json");
 
             var response = await client.PostAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl, requestContent);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             testContext.HabitatService.Verify(x => x.CreateAsync(It.IsAny<HabitatViewModel>()));
+        }
+
+        [Test]
+        public async static Task FailureCreateHabitat_NoRequiredField()
+        {
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            var habitat = new HabitatViewModel()
+            {
+            };
+
+            var serhabitat = JsonConvert.SerializeObject(habitat);
+            var requestContent = new StringContent(serhabitat, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl, requestContent);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        [Test]
+        public async static Task FailureCreateHabitat_SendNull()
+        {
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            var habitat = new HabitatViewModel()
+            {
+                Name = "TEST"
+            };
+
+            habitat = null;
+
+            var serhabitat = JsonConvert.SerializeObject(habitat);
+            var requestContent = new StringContent(serhabitat, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl, requestContent);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         }
 
         [Test]
@@ -67,12 +106,12 @@ namespace TestDemoPokemonApi.Controllers
 
             using (var context = new PokemonWorldContext(testContext.DbContextOptions))
             {
-                var habitath = context.Habitats.First(x => x.Id == habitatId);
+                var habitat = context.Habitats.First(x => x.Id == habitatId);
 
-                habitath.Name = "TEST_UPDATE";
+                habitat.Name = "TEST_UPDATE";
 
-                var serCountry = JsonConvert.SerializeObject(habitath);
-                var requestContent = new StringContent(serCountry, Encoding.UTF8, "application/json");
+                var serHabitat = JsonConvert.SerializeObject(habitat);
+                var requestContent = new StringContent(serHabitat, Encoding.UTF8, "application/json");
 
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl, requestContent);
 
@@ -82,7 +121,7 @@ namespace TestDemoPokemonApi.Controllers
         }
 
         [Test]
-        public async static Task FailureUpdatingHabitat()
+        public async static Task FailureUpdatingHabitat_WrongId()
         {
             int habitatId = SharedData.GoodHabitatId;
 
@@ -91,18 +130,44 @@ namespace TestDemoPokemonApi.Controllers
 
             using (var context = new PokemonWorldContext(testContext.DbContextOptions))
             {
-                var country = context.Habitats.First(x => x.Id == habitatId);
+                var habitat = context.Habitats.First(x => x.Id == habitatId);
 
-                country.Id = SharedData.BadHabitatId;
-                country.Name = "TEST_UPDATE";
+                habitat.Id = SharedData.BadHabitatId;
+                habitat.Name = "TEST_UPDATE";
 
-                var serCountry = JsonConvert.SerializeObject(country);
-                var requestContent = new StringContent(serCountry, Encoding.UTF8, "application/json");
+                var serHabitat = JsonConvert.SerializeObject(habitat);
+                var requestContent = new StringContent(serHabitat, Encoding.UTF8, "application/json");
 
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
                 testContext.HabitatService.Verify(x => x.UpdateAsync(It.IsAny<HabitatViewModel>()));
+            }
+        }
+
+        [Test]
+        public async static Task FailureUpdatingHabitat_SendNull()
+        {
+            int habitatId = SharedData.GoodHabitatId;
+
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            using (var context = new PokemonWorldContext(testContext.DbContextOptions))
+            {
+                var habitat = context.Habitats.First(x => x.Id == habitatId);
+
+                habitat.Id = SharedData.GoodHabitatId;
+                habitat.Name = "TEST_UPDATE";
+
+                habitat = null;
+
+                var serHabitat = JsonConvert.SerializeObject(habitat);
+                var requestContent = new StringContent(serHabitat, Encoding.UTF8, "application/json");
+
+                var response = await client.PutAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl, requestContent);
+
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
             }
         }
 

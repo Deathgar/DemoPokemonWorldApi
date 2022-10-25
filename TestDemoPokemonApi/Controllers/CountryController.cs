@@ -38,7 +38,7 @@ namespace TestDemoPokemonApi.Controllers
         }
 
         [Test]
-        public async static Task CreateCountry()
+        public async static Task SuccessfulCreateCountry()
         {
             var testContext = TestContext.Create();
             var client = testContext.Client;
@@ -55,6 +55,45 @@ namespace TestDemoPokemonApi.Controllers
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             testContext.CountryService.Verify(x => x.CreateAsync(It.IsAny<CountryViewModel>()));
+        }
+
+        [Test]
+        public async static Task FailureCreateCountry_NoRequiredField()
+        {
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            var country = new CountryViewModel()
+            {
+            };
+
+            var serCountry = JsonConvert.SerializeObject(country);
+            var requestContent = new StringContent(serCountry, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(SharedData.BaseUrl + SharedData.CountryPathUrl, requestContent);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        [Test]
+        public async static Task FailureCreateCountry_SendNull()
+        {
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            var country = new CountryViewModel()
+            {
+                Name = "TEST"
+            };
+
+            country = null;
+
+            var serCountry = JsonConvert.SerializeObject(country);
+            var requestContent = new StringContent(serCountry, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(SharedData.BaseUrl + SharedData.CountryPathUrl, requestContent);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         }
 
         [Test]
@@ -82,7 +121,7 @@ namespace TestDemoPokemonApi.Controllers
         }
 
         [Test]
-        public async static Task FailureUpdatingCountry()
+        public async static Task FailureUpdatingCountry_WrongId()
         {
             int countryId = SharedData.GoodCountryId;
 
@@ -103,6 +142,32 @@ namespace TestDemoPokemonApi.Controllers
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
                 testContext.CountryService.Verify(x => x.UpdateAsync(It.IsAny<CountryViewModel>()));
+            }
+        }
+
+        [Test]
+        public async static Task FailureUpdatingCountry_SendNull()
+        {
+            int countryId = SharedData.GoodCountryId;
+
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            using (var context = new PokemonWorldContext(testContext.DbContextOptions))
+            {
+                var country = context.Countries.First(x => x.Id == countryId);
+
+                country.Id = SharedData.GoodCountryId;
+                country.Name = "TEST_UPDATE";
+
+                country = null;
+
+                var serCountry = JsonConvert.SerializeObject(country);
+                var requestContent = new StringContent(serCountry, Encoding.UTF8, "application/json");
+
+                var response = await client.PutAsync(SharedData.BaseUrl + SharedData.CountryPathUrl, requestContent);
+
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
             }
         }
 

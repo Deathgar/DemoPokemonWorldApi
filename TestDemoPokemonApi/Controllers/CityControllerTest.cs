@@ -59,7 +59,7 @@ namespace TestDemoPokemonApi.Controllers
         }
 
         [Test]
-        public async static Task FailureCreateCity()
+        public async static Task FailureCreateCity_WrongCountryId()
         {
             var testContext = TestContext.Create();
             var client = testContext.Client;
@@ -77,6 +77,47 @@ namespace TestDemoPokemonApi.Controllers
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
             testContext.CityService.Verify(x => x.CreateAsync(It.IsAny<CityViewModel>()));
+        }
+
+        [Test]
+        public async static Task FailureCreateCity_NoRequiredField()
+        {
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            var city = new CityViewModel()
+            {
+                CountryId = SharedData.GoodCountryId
+            };
+
+            var serCity = JsonConvert.SerializeObject(city);
+            var requestContent = new StringContent(serCity, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(SharedData.BaseUrl + SharedData.CityPathUrl, requestContent);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        }
+
+        [Test]
+        public async static Task FailureCreateCity_SendNull()
+        {
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            var city = new CityViewModel()
+            {
+                Name = "TEST",
+                CountryId = SharedData.GoodCountryId
+            };
+
+            city = null;
+
+            var serCity = JsonConvert.SerializeObject(city);
+            var requestContent = new StringContent(serCity, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(SharedData.BaseUrl + SharedData.CityPathUrl, requestContent);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
         }
 
         [Test]
@@ -104,7 +145,7 @@ namespace TestDemoPokemonApi.Controllers
         }
 
         [Test]
-        public async static Task FailureUpdatingCity()
+        public async static Task FailureUpdatingCity_WrongId()
         {
             int cityId = SharedData.GoodCityId;
 
@@ -125,6 +166,32 @@ namespace TestDemoPokemonApi.Controllers
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
                 testContext.CityService.Verify(x => x.UpdateAsync(It.IsAny<CityViewModel>()));
+            }
+        }
+
+        [Test]
+        public async static Task FailureUpdatingCity_SendNull()
+        {
+            int cityId = SharedData.GoodCityId;
+
+            var testContext = TestContext.Create();
+            var client = testContext.Client;
+
+            using (var context = new PokemonWorldContext(testContext.DbContextOptions))
+            {
+                var city = context.Cities.First(x => x.Id == cityId);
+
+                city.Id = SharedData.GoodCityId;
+                city.Name = "TEST_UPDATE";
+
+                city = null;
+
+                var serCity = JsonConvert.SerializeObject(city);
+                var requestContent = new StringContent(serCity, Encoding.UTF8, "application/json");
+
+                var response = await client.PutAsync(SharedData.BaseUrl + SharedData.CityPathUrl, requestContent);
+
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
             }
         }
 
