@@ -31,6 +31,9 @@ public class HunterLicenseService : IHunterLicenseService
 
     public async Task<bool> CreateAsync(HunterLicenseViewModel entity)
     {
+        if (entity == null)
+            return false;
+
         var dto = _mapper.Map<HunterLicenseDto>(entity);
 
         _repositoryWrapper.HunterLicenseRepository.Create(dto);
@@ -41,6 +44,14 @@ public class HunterLicenseService : IHunterLicenseService
 
     public async Task<bool> UpdateAsync(HunterLicenseViewModel entity)
     {
+        if (entity == null)
+            return false;
+
+        bool isExist = await _repositoryWrapper.HunterLicenseRepository.Exist(entity.Id);
+
+        if (!isExist)
+            return false;
+
         var dto = _mapper.Map<HunterLicenseDto>(entity);
 
         _repositoryWrapper.HunterLicenseRepository.Update(dto);
