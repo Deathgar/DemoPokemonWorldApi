@@ -32,6 +32,9 @@ public class CityService : ICityService
 
     public async Task<bool> CreateAsync(CityViewModel entity)
     {
+        if (entity == null)
+            return false;
+
         bool isCountryExist = await _repositoryWrapper.CountryRepository.Exist(entity.CountryId);
 
         if (!isCountryExist)
@@ -48,9 +51,13 @@ public class CityService : ICityService
 
     public async Task<bool> UpdateAsync(CityViewModel entity)
     {
-        bool isCityExist = await _repositoryWrapper.CityRepository.Exist(entity.Id);
+        if (entity == null)
+            return false;
 
-        if (!isCityExist)
+        bool isCityExist = await _repositoryWrapper.CityRepository.Exist(entity.Id);
+        bool isCountryExist = await _repositoryWrapper.CountryRepository.Exist(entity.CountryId);
+
+        if (!(isCityExist && isCountryExist))
             return false;
 
         var cityDto = _mapper.Map<CityDto>(entity);
