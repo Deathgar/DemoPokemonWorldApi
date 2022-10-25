@@ -34,6 +34,11 @@ public class HunterController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] HunterViewModel vm)
     {
+        if(vm.Age <= 0)
+        {
+            return BadRequest();
+        }
+
         bool isSuccess = await _hunterService.CreateAsync(vm);
 
         return isSuccess ? Ok() : NotFound();
