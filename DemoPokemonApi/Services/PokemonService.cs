@@ -31,6 +31,9 @@ public class PokemonService : IPokemonService
 
     public async Task<bool> CreateAsync(PokemonViewModel entity)
     {
+        if (entity == null)
+            return false;
+
         var isExistHabitat = await _repositoryWrapper.HabitatRepository.Exist(entity.HabitatId);
 
         if (!isExistHabitat)
@@ -47,7 +50,13 @@ public class PokemonService : IPokemonService
 
     public async Task<bool> UpdateAsync(PokemonViewModel entity)
     {
-        if(!await _repositoryWrapper.HabitatRepository.Exist(entity.HabitatId)) 
+        if (entity == null)
+            return false;
+
+        bool isPokemonExist = await _repositoryWrapper.PokemonRepository.Exist(entity.Id);
+        bool isHabitatExist = await _repositoryWrapper.HabitatRepository.Exist(entity.HabitatId);
+
+        if (!(isPokemonExist && isHabitatExist)) 
         {
             return false;
         }
@@ -76,6 +85,11 @@ public class PokemonService : IPokemonService
 
     public async Task<IEnumerable<HunterViewModel>> GetHuntersAsync(int pokemonId)
     {
+        bool isPokemonExist = await _repositoryWrapper.PokemonRepository.Exist(pokemonId);
+
+        if (!isPokemonExist)
+            return null;
+
         var hunterDtos = await _repositoryWrapper.PokemonRepository.GetHuntersByPokemonAsync(pokemonId);
 
         return _mapper.Map<IEnumerable<HunterViewModel>>(hunterDtos);
@@ -83,6 +97,11 @@ public class PokemonService : IPokemonService
 
     public async Task<HabitatViewModel> GetHabitatAsync(int pokemonId)
     {
+        bool isPokemonExist = await _repositoryWrapper.PokemonRepository.Exist(pokemonId);
+
+        if (!isPokemonExist)
+            return null;
+
         var hunterDtos = await _repositoryWrapper.PokemonRepository.GetHabitatByPokemonAsync(pokemonId);
 
         return _mapper.Map<HabitatViewModel>(hunterDtos);

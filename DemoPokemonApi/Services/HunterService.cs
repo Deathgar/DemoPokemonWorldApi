@@ -31,7 +31,10 @@ public class HunterService : IHunterService
 
     public async Task<bool> CreateAsync(HunterViewModel entity)
     {
-        if(entity.CityId != null)
+        if (entity == null)
+            return false;
+
+        if (entity.CityId != null)
         {
             bool isCityExsit = await _repositoryWrapper.CityRepository.Exist(entity.CityId.Value);
 
@@ -58,6 +61,14 @@ public class HunterService : IHunterService
 
     public async Task<bool> UpdateAsync(HunterViewModel entity)
     {
+        if (entity == null)
+            return false;
+
+        bool isExist = await _repositoryWrapper.HunterRepository.Exist(entity.Id);
+
+        if (!isExist)
+            return false;
+
         var dto = _mapper.Map<HunterDto>(entity);
 
         _repositoryWrapper.HunterRepository.Update(dto);
