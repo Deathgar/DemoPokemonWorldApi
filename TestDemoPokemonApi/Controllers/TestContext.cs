@@ -88,16 +88,16 @@ public class TestContext
 
     private void ConfigureCountryMock()
     {
-        CountryService.Setup(x => x.CreateAsync(It.IsAny<CountryViewModel>())).ReturnsAsync(true);
-        CountryService.Setup(x => x.UpdateAsync(It.IsAny<CountryViewModel>())).ReturnsAsync(true);
-        CountryService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync(true);
-
         var countries = new List<CountryDto>();
 
         using (var context = new PokemonWorldContext(DbContextOptions))
         {
             countries = context.Countries.Include(x => x.Cities).Include(x => x.Habitats).ToList();
         }
+
+        CountryService.Setup(x => x.CreateAsync(It.IsAny<CountryViewModel>())).ReturnsAsync(true);
+        CountryService.Setup(x => x.UpdateAsync(It.IsAny<CountryViewModel>())).ReturnsAsync((CountryViewModel x) => countries.Any(y => y.Id == x.Id));
+        CountryService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => countries.Any(y => y.Id == id));
 
         CountryService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CountryViewModel>(countries.FirstOrDefault(x => x.Id == id)));
         CountryService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<CountryViewModel>>(countries.ToList()));
