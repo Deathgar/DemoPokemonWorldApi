@@ -21,12 +21,12 @@ public class TestContext
 {
     public Mock<IServiceWrapper> ServiceWrapperMock { get; } = new();
 
-    public Mock<ICountryService> CountryService { get; } = new();
-    public Mock<ICityService> CityService { get; } = new();
-    public Mock<IHabitatService> HabitatService { get; } = new();
-    public Mock<IHunterService> HunterService { get; } = new();
-    public Mock<IPokemonService> PokemonService { get; } = new();
-    public Mock<IHunterLicenseService> HunterLicenseService { get; } = new();
+    public Mock<ICountryService> CountryServiceMock { get; } = new();
+    public Mock<ICityService> CityServiceMock { get; } = new();
+    public Mock<IHabitatService> HabitatServiceMock { get; } = new();
+    public Mock<IHunterService> HunterServiceMock { get; } = new();
+    public Mock<IPokemonService> PokemonServiceMock { get; } = new();
+    public Mock<IHunterLicenseService> HunterLicenseServiceMock { get; } = new();
 
     public HttpClient Client { get; }
     public DbContextOptions<PokemonWorldContext> DbContextOptions = new();
@@ -67,13 +67,13 @@ public class TestContext
 
     private void InitMocks()
     {
-        ServiceWrapperMock.SetupGet(x => x.CountryService).Returns(CountryService.Object);
-        ServiceWrapperMock.SetupGet(x => x.CityService).Returns(CityService.Object);
-        ServiceWrapperMock.SetupGet(x => x.HabitatService).Returns(HabitatService.Object);
-        ServiceWrapperMock.SetupGet(x => x.HunterService).Returns(HunterService.Object);
-        ServiceWrapperMock.SetupGet(x => x.PokemonService).Returns(PokemonService.Object);
+        ServiceWrapperMock.SetupGet(x => x.CountryService).Returns(CountryServiceMock.Object);
+        ServiceWrapperMock.SetupGet(x => x.CityService).Returns(CityServiceMock.Object);
+        ServiceWrapperMock.SetupGet(x => x.HabitatService).Returns(HabitatServiceMock.Object);
+        ServiceWrapperMock.SetupGet(x => x.HunterService).Returns(HunterServiceMock.Object);
+        ServiceWrapperMock.SetupGet(x => x.PokemonService).Returns(PokemonServiceMock.Object);
 
-        ServiceWrapperMock.SetupGet(x => x.HunterLicenseService).Returns(HunterLicenseService.Object);
+        ServiceWrapperMock.SetupGet(x => x.HunterLicenseService).Returns(HunterLicenseServiceMock.Object);
     }
 
     private void ConfigureMocks()
@@ -95,20 +95,20 @@ public class TestContext
             countries = context.Countries.Include(x => x.Cities).Include(x => x.Habitats).ToList();
         }
 
-        CountryService.Setup(x => x.CreateAsync(It.IsAny<CountryViewModel>())).ReturnsAsync(true);
-        CountryService.Setup(x => x.UpdateAsync(It.IsAny<CountryViewModel>())).ReturnsAsync((CountryViewModel x) => countries.Any(y => y.Id == x.Id));
-        CountryService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => countries.Any(y => y.Id == id));
+        CountryServiceMock.Setup(x => x.CreateAsync(It.IsAny<CountryViewModel>())).ReturnsAsync(true);
+        CountryServiceMock.Setup(x => x.UpdateAsync(It.IsAny<CountryViewModel>())).ReturnsAsync((CountryViewModel x) => countries.Any(y => y.Id == x.Id));
+        CountryServiceMock.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => countries.Any(y => y.Id == id));
 
-        CountryService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CountryViewModel>(countries.FirstOrDefault(x => x.Id == id)));
-        CountryService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<CountryViewModel>>(countries.ToList()));
+        CountryServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CountryViewModel>(countries.FirstOrDefault(x => x.Id == id)));
+        CountryServiceMock.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<CountryViewModel>>(countries.ToList()));
         
-        CountryService.Setup(x => x.GetCitiesAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
+        CountryServiceMock.Setup(x => x.GetCitiesAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
         {
             var result = countries.FirstOrDefault(x => x.Id == id);
             return result != null ? SharedData.Mapper.Map<IEnumerable<CityViewModel>>(result.Cities) : null;
         });
 
-        CountryService.Setup(x => x.GetHabitatsAsync(It.IsAny<int>())).ReturnsAsync((int id) =>
+        CountryServiceMock.Setup(x => x.GetHabitatsAsync(It.IsAny<int>())).ReturnsAsync((int id) =>
         {
             var result = countries.FirstOrDefault(x => x.Id == id);
             return result != null ? SharedData.Mapper.Map<IEnumerable<HabitatViewModel>>(result.Habitats) : null;
@@ -126,15 +126,15 @@ public class TestContext
             countries = context.Countries.ToList();
         }
 
-        CityService.Setup(x => x.CreateAsync(It.IsAny<CityViewModel>())).ReturnsAsync((CityViewModel x) => countries.Any(y => y.Id == x.CountryId));
-        CityService.Setup(x => x.UpdateAsync(It.IsAny<CityViewModel>())).ReturnsAsync((CityViewModel x) => cities.Any(y => y.Id == x.Id) && countries.Any(y => y.Id == x.CountryId));
-        CityService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => cities.Any(y => y.Id == id));
+        CityServiceMock.Setup(x => x.CreateAsync(It.IsAny<CityViewModel>())).ReturnsAsync((CityViewModel x) => countries.Any(y => y.Id == x.CountryId));
+        CityServiceMock.Setup(x => x.UpdateAsync(It.IsAny<CityViewModel>())).ReturnsAsync((CityViewModel x) => cities.Any(y => y.Id == x.Id) && countries.Any(y => y.Id == x.CountryId));
+        CityServiceMock.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => cities.Any(y => y.Id == id));
 
-        CityService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CityViewModel>(cities.FirstOrDefault(x => x.Id == id)));
-        CityService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<CityViewModel>>(cities.ToList()));
+        CityServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CityViewModel>(cities.FirstOrDefault(x => x.Id == id)));
+        CityServiceMock.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<CityViewModel>>(cities.ToList()));
 
-        CityService.Setup(x => x.GetCountryAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CountryViewModel>(cities.FirstOrDefault(x => x.Id == id)?.Country));
-        CityService.Setup(x => x.GetHuntersAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
+        CityServiceMock.Setup(x => x.GetCountryAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CountryViewModel>(cities.FirstOrDefault(x => x.Id == id)?.Country));
+        CityServiceMock.Setup(x => x.GetHuntersAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
         {
             var result = cities.FirstOrDefault(x => x.Id == id);
             return result != null ? SharedData.Mapper.Map<IEnumerable<HunterViewModel>>(result.Hunters) : null;
@@ -150,20 +150,20 @@ public class TestContext
             habitats = context.Habitats.Include(x => x.Countries).Include(x => x.Pokemons).ToList();
         }
 
-        HabitatService.Setup(x => x.CreateAsync(It.IsAny<HabitatViewModel>())).ReturnsAsync(true);
-        HabitatService.Setup(x => x.UpdateAsync(It.IsAny<HabitatViewModel>())).ReturnsAsync((HabitatViewModel x) => habitats.Any(y => y.Id == x.Id));
-        HabitatService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => habitats.Any(y => y.Id == id));
+        HabitatServiceMock.Setup(x => x.CreateAsync(It.IsAny<HabitatViewModel>())).ReturnsAsync(true);
+        HabitatServiceMock.Setup(x => x.UpdateAsync(It.IsAny<HabitatViewModel>())).ReturnsAsync((HabitatViewModel x) => habitats.Any(y => y.Id == x.Id));
+        HabitatServiceMock.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => habitats.Any(y => y.Id == id));
 
-        HabitatService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HabitatViewModel>(habitats.FirstOrDefault(x => x.Id == id)));
-        HabitatService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HabitatViewModel>>(habitats.ToList()));
+        HabitatServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HabitatViewModel>(habitats.FirstOrDefault(x => x.Id == id)));
+        HabitatServiceMock.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HabitatViewModel>>(habitats.ToList()));
 
-        HabitatService.Setup(x => x.GetCountriesAsync(It.IsAny<int>())).ReturnsAsync((int id) =>
+        HabitatServiceMock.Setup(x => x.GetCountriesAsync(It.IsAny<int>())).ReturnsAsync((int id) =>
         {
             var result = habitats.FirstOrDefault(x => x.Id == id);
             return result != null ? SharedData.Mapper.Map<IEnumerable<CountryViewModel>>(result.Countries) : null;
         });
 
-        HabitatService.Setup(x => x.GetPokemonsAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
+        HabitatServiceMock.Setup(x => x.GetPokemonsAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
         {
             var result = habitats.FirstOrDefault(x => x.Id == id);
             return result != null ? SharedData.Mapper.Map<IEnumerable<PokemonViewModel>>(result.Pokemons) : null;
@@ -179,15 +179,15 @@ public class TestContext
             hunters = context.Hunters.Include(x => x.City).Include(x => x.Pokemons).Include(x => x.HunterLicense).ToList();
         }
 
-        HunterService.Setup(x => x.CreateAsync(It.IsAny<HunterViewModel>())).ReturnsAsync(true);
-        HunterService.Setup(x => x.UpdateAsync(It.IsAny<HunterViewModel>())).ReturnsAsync((HunterViewModel x) => hunters.Any(y => y.Id == x.Id));
-        HunterService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => hunters.Any(y => y.Id == id));
+        HunterServiceMock.Setup(x => x.CreateAsync(It.IsAny<HunterViewModel>())).ReturnsAsync(true);
+        HunterServiceMock.Setup(x => x.UpdateAsync(It.IsAny<HunterViewModel>())).ReturnsAsync((HunterViewModel x) => hunters.Any(y => y.Id == x.Id));
+        HunterServiceMock.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => hunters.Any(y => y.Id == id));
 
-        HunterService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HunterViewModel>(hunters.FirstOrDefault(x => x.Id == id)));
-        HunterService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HunterViewModel>>(hunters.ToList()));       
+        HunterServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HunterViewModel>(hunters.FirstOrDefault(x => x.Id == id)));
+        HunterServiceMock.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HunterViewModel>>(hunters.ToList()));       
 
-        HunterService.Setup(x => x.GetCityAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CityViewModel>(hunters.FirstOrDefault(x => x.Id == id)?.City));
-        HunterService.Setup(x => x.GetPokemonsAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
+        HunterServiceMock.Setup(x => x.GetCityAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<CityViewModel>(hunters.FirstOrDefault(x => x.Id == id)?.City));
+        HunterServiceMock.Setup(x => x.GetPokemonsAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
         {
             var result = hunters.FirstOrDefault(x => x.Id == id);
             return result != null ? SharedData.Mapper.Map<IEnumerable<PokemonViewModel>>(result.Pokemons) : null; 
@@ -205,15 +205,15 @@ public class TestContext
             habitats = context.Habitats.ToList();
         }
 
-        PokemonService.Setup(x => x.CreateAsync(It.IsAny<PokemonViewModel>())).ReturnsAsync((PokemonViewModel x) => habitats.Any(y => y.Id == x.HabitatId));
-        PokemonService.Setup(x => x.UpdateAsync(It.IsAny<PokemonViewModel>())).ReturnsAsync((PokemonViewModel x) => pokemons.Any(y => y.Id == x.Id) && habitats.Any(y => y.Id == x.HabitatId));
-        PokemonService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => pokemons.Any(y => y.Id == id));
+        PokemonServiceMock.Setup(x => x.CreateAsync(It.IsAny<PokemonViewModel>())).ReturnsAsync((PokemonViewModel x) => habitats.Any(y => y.Id == x.HabitatId));
+        PokemonServiceMock.Setup(x => x.UpdateAsync(It.IsAny<PokemonViewModel>())).ReturnsAsync((PokemonViewModel x) => pokemons.Any(y => y.Id == x.Id) && habitats.Any(y => y.Id == x.HabitatId));
+        PokemonServiceMock.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync((int id) => pokemons.Any(y => y.Id == id));
 
-        PokemonService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<PokemonViewModel>(pokemons.FirstOrDefault(x => x.Id == id)));
-        PokemonService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<PokemonViewModel>>(pokemons.ToList()));        
+        PokemonServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<PokemonViewModel>(pokemons.FirstOrDefault(x => x.Id == id)));
+        PokemonServiceMock.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<PokemonViewModel>>(pokemons.ToList()));        
 
-        PokemonService.Setup(x => x.GetHabitatAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HabitatViewModel>(pokemons.FirstOrDefault(x => x.Id == id)?.Habitat));
-        PokemonService.Setup(x => x.GetHuntersAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
+        PokemonServiceMock.Setup(x => x.GetHabitatAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HabitatViewModel>(pokemons.FirstOrDefault(x => x.Id == id)?.Habitat));
+        PokemonServiceMock.Setup(x => x.GetHuntersAsync(It.IsAny<int>())).ReturnsAsync((int id) => 
         {
             var result = pokemons.FirstOrDefault(x => x.Id == id);
             return result != null ? SharedData.Mapper.Map<IEnumerable<HunterViewModel>>(result.Hunters) : null;
@@ -228,9 +228,9 @@ public class TestContext
             hunterLicenses = context.HunterLicenses.ToList();
         }
 
-        HunterLicenseService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HunterLicenseViewModel>(hunterLicenses.FirstOrDefault(x => x.Id == id)));
-        HunterLicenseService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HunterLicenseViewModel>>(hunterLicenses.ToList()));
+        HunterLicenseServiceMock.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HunterLicenseViewModel>(hunterLicenses.FirstOrDefault(x => x.Id == id)));
+        HunterLicenseServiceMock.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HunterLicenseViewModel>>(hunterLicenses.ToList()));
 
-        HunterLicenseService.Setup(x => x.UpdateAsync(It.IsAny<HunterLicenseViewModel>())).ReturnsAsync((HunterLicenseViewModel x) => hunterLicenses.Any(y => y.Id == x.Id));
+        HunterLicenseServiceMock.Setup(x => x.UpdateAsync(It.IsAny<HunterLicenseViewModel>())).ReturnsAsync((HunterLicenseViewModel x) => hunterLicenses.Any(y => y.Id == x.Id));
     }
 }

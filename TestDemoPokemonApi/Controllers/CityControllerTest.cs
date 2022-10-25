@@ -24,7 +24,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CityPathUrl);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CityService.Verify(x => x.GetAsync());
+            testContext.CityServiceMock.Verify(x => x.GetAsync());
 
             var content = await response.Content.ReadAsStringAsync();
             var cities = JsonConvert.DeserializeObject<List<CityViewModel>>(content);
@@ -55,7 +55,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.PostAsync(SharedData.BaseUrl + SharedData.CityPathUrl, requestContent);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CityService.Verify(x => x.CreateAsync(It.IsAny<CityViewModel>()));
+            testContext.CityServiceMock.Verify(x => x.CreateAsync(It.IsAny<CityViewModel>()));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.PostAsync(SharedData.BaseUrl + SharedData.CityPathUrl, requestContent);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.CityService.Verify(x => x.CreateAsync(It.IsAny<CityViewModel>()));
+            testContext.CityServiceMock.Verify(x => x.CreateAsync(It.IsAny<CityViewModel>()));
         }
 
         [Test]
@@ -140,7 +140,7 @@ namespace TestDemoPokemonApi.Controllers
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.CityPathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                testContext.CityService.Verify(x => x.UpdateAsync(It.IsAny<CityViewModel>()));
+                testContext.CityServiceMock.Verify(x => x.UpdateAsync(It.IsAny<CityViewModel>()));
             }            
         }
 
@@ -165,7 +165,7 @@ namespace TestDemoPokemonApi.Controllers
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.CityPathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-                testContext.CityService.Verify(x => x.UpdateAsync(It.IsAny<CityViewModel>()));
+                testContext.CityServiceMock.Verify(x => x.UpdateAsync(It.IsAny<CityViewModel>()));
             }
         }
 
@@ -190,7 +190,7 @@ namespace TestDemoPokemonApi.Controllers
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.CityPathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-                testContext.CityService.Verify(x => x.UpdateAsync(It.IsAny<CityViewModel>()));
+                testContext.CityServiceMock.Verify(x => x.UpdateAsync(It.IsAny<CityViewModel>()));
             }
         }
 
@@ -231,7 +231,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.DeleteAsync(SharedData.BaseUrl + SharedData.CityPathUrl + cityId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CityService.Verify(x => x.DeleteAsync(cityId));
+            testContext.CityServiceMock.Verify(x => x.DeleteAsync(cityId));
         }
 
         [Test]
@@ -245,7 +245,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.DeleteAsync(SharedData.BaseUrl + SharedData.CityPathUrl + cityId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.CityService.Verify(x => x.DeleteAsync(cityId));
+            testContext.CityServiceMock.Verify(x => x.DeleteAsync(cityId));
         }
 
         [Test]
@@ -259,7 +259,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CityPathUrl + cityId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CityService.Verify(x => x.GetAsync(cityId));
+            testContext.CityServiceMock.Verify(x => x.GetAsync(cityId));
 
             var content = await response.Content.ReadAsStringAsync();
             var city = JsonConvert.DeserializeObject<CityViewModel>(content);
@@ -287,7 +287,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CityPathUrl + cityId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.CityService.Verify(x => x.GetAsync(cityId));
+            testContext.CityServiceMock.Verify(x => x.GetAsync(cityId));
         }
 
         [Test]
@@ -301,7 +301,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CityPathUrl + SharedData.CityHuntersPathUrl + cityId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CityService.Verify(x => x.GetHuntersAsync(cityId));
+            testContext.CityServiceMock.Verify(x => x.GetHuntersAsync(cityId));
 
             var content = await response.Content.ReadAsStringAsync();
             var hunters = JsonConvert.DeserializeObject<IEnumerable<HunterViewModel>>(content);
@@ -325,7 +325,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CityPathUrl + SharedData.CityHuntersPathUrl + cityId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.CityService.Verify(x => x.GetHuntersAsync(cityId));
+            testContext.CityServiceMock.Verify(x => x.GetHuntersAsync(cityId));
         }
 
         [Test]
@@ -339,7 +339,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CityPathUrl + SharedData.CityCountryPathUrl + cityId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CityService.Verify(x => x.GetCountryAsync(cityId));
+            testContext.CityServiceMock.Verify(x => x.GetCountryAsync(cityId));
 
             var content = await response.Content.ReadAsStringAsync();
             var country = JsonConvert.DeserializeObject<CountryViewModel>(content);
@@ -363,7 +363,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CityPathUrl + SharedData.CityCountryPathUrl + cityId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.CityService.Verify(x => x.GetCountryAsync(cityId));
+            testContext.CityServiceMock.Verify(x => x.GetCountryAsync(cityId));
         }
     }
 }

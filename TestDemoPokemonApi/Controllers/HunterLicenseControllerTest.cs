@@ -23,7 +23,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HunterLicensePathUrl);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.HunterLicenseService.Verify(x => x.GetAsync());
+            testContext.HunterLicenseServiceMock.Verify(x => x.GetAsync());
 
             var content = await response.Content.ReadAsStringAsync();
             var hunterLicenses = JsonConvert.DeserializeObject<List<HunterLicenseViewModel>>(content);
@@ -56,7 +56,7 @@ namespace TestDemoPokemonApi.Controllers
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.HunterLicensePathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                testContext.HunterLicenseService.Verify(x => x.UpdateAsync(It.IsAny<HunterLicenseViewModel>()));
+                testContext.HunterLicenseServiceMock.Verify(x => x.UpdateAsync(It.IsAny<HunterLicenseViewModel>()));
             }
         }
 
@@ -80,7 +80,7 @@ namespace TestDemoPokemonApi.Controllers
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.HunterLicensePathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-                testContext.HunterLicenseService.Verify(x => x.UpdateAsync(It.IsAny<HunterLicenseViewModel>()));
+                testContext.HunterLicenseServiceMock.Verify(x => x.UpdateAsync(It.IsAny<HunterLicenseViewModel>()));
             }
         }
 
@@ -118,7 +118,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HunterLicensePathUrl + hunterLicenseId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.HunterLicenseService.Verify(x => x.GetAsync(hunterLicenseId));
+            testContext.HunterLicenseServiceMock.Verify(x => x.GetAsync(hunterLicenseId));
 
             var content = await response.Content.ReadAsStringAsync();
             var hunterLicense = JsonConvert.DeserializeObject<HunterLicenseViewModel>(content);
@@ -142,7 +142,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HunterLicensePathUrl + hunterLicenseId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.HunterLicenseService.Verify(x => x.GetAsync(hunterLicenseId));
+            testContext.HunterLicenseServiceMock.Verify(x => x.GetAsync(hunterLicenseId));
         }
     }
 }

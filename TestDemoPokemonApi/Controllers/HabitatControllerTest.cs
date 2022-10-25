@@ -24,7 +24,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.HabitatService.Verify(x => x.GetAsync());
+            testContext.HabitatServiceMock.Verify(x => x.GetAsync());
 
             var content = await response.Content.ReadAsStringAsync();
             var habitats = JsonConvert.DeserializeObject<List<HabitatViewModel>>(content);
@@ -54,7 +54,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.PostAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl, requestContent);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.HabitatService.Verify(x => x.CreateAsync(It.IsAny<HabitatViewModel>()));
+            testContext.HabitatServiceMock.Verify(x => x.CreateAsync(It.IsAny<HabitatViewModel>()));
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace TestDemoPokemonApi.Controllers
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                testContext.HabitatService.Verify(x => x.UpdateAsync(It.IsAny<HabitatViewModel>()));
+                testContext.HabitatServiceMock.Verify(x => x.UpdateAsync(It.IsAny<HabitatViewModel>()));
             }
         }
 
@@ -141,7 +141,7 @@ namespace TestDemoPokemonApi.Controllers
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-                testContext.HabitatService.Verify(x => x.UpdateAsync(It.IsAny<HabitatViewModel>()));
+                testContext.HabitatServiceMock.Verify(x => x.UpdateAsync(It.IsAny<HabitatViewModel>()));
             }
         }
 
@@ -182,7 +182,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.DeleteAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl + habitatId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.HabitatService.Verify(x => x.DeleteAsync(habitatId));
+            testContext.HabitatServiceMock.Verify(x => x.DeleteAsync(habitatId));
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.DeleteAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl + habitatId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.HabitatService.Verify(x => x.DeleteAsync(habitatId));
+            testContext.HabitatServiceMock.Verify(x => x.DeleteAsync(habitatId));
         }
 
         [Test]
@@ -210,7 +210,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl + habitatId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.HabitatService.Verify(x => x.GetAsync(habitatId));
+            testContext.HabitatServiceMock.Verify(x => x.GetAsync(habitatId));
 
             var content = await response.Content.ReadAsStringAsync();
             var habitat = JsonConvert.DeserializeObject<HabitatViewModel>(content);
@@ -234,7 +234,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl + habitatId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.HabitatService.Verify(x => x.GetAsync(habitatId));
+            testContext.HabitatServiceMock.Verify(x => x.GetAsync(habitatId));
         }
 
         [Test]
@@ -248,7 +248,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl + SharedData.HabitatCountriesPathUrl + habitatId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.HabitatService.Verify(x => x.GetCountriesAsync(habitatId));
+            testContext.HabitatServiceMock.Verify(x => x.GetCountriesAsync(habitatId));
 
             var content = await response.Content.ReadAsStringAsync();
             var countries = JsonConvert.DeserializeObject<IEnumerable<CountryViewModel>>(content);
@@ -272,7 +272,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl + SharedData.HabitatCountriesPathUrl + habitatId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.HabitatService.Verify(x => x.GetCountriesAsync(habitatId));
+            testContext.HabitatServiceMock.Verify(x => x.GetCountriesAsync(habitatId));
         }
 
         [Test]
@@ -286,7 +286,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl + SharedData.HabitatPokemonsPathUrl + habitatId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.HabitatService.Verify(x => x.GetPokemonsAsync(habitatId));
+            testContext.HabitatServiceMock.Verify(x => x.GetPokemonsAsync(habitatId));
 
             var content = await response.Content.ReadAsStringAsync();
             var pokemons = JsonConvert.DeserializeObject<IEnumerable<PokemonViewModel>>(content);
@@ -310,7 +310,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.HabitatPathUrl + SharedData.HabitatPokemonsPathUrl + habitatId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.HabitatService.Verify(x => x.GetPokemonsAsync(habitatId));
+            testContext.HabitatServiceMock.Verify(x => x.GetPokemonsAsync(habitatId));
         }
     }
 }

@@ -24,7 +24,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CountryPathUrl);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CountryService.Verify(x => x.GetAsync());
+            testContext.CountryServiceMock.Verify(x => x.GetAsync());
 
             var content = await response.Content.ReadAsStringAsync();
             var countries = JsonConvert.DeserializeObject<List<CountryViewModel>>(content);
@@ -54,7 +54,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.PostAsync(SharedData.BaseUrl + SharedData.CountryPathUrl, requestContent);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CountryService.Verify(x => x.CreateAsync(It.IsAny<CountryViewModel>()));
+            testContext.CountryServiceMock.Verify(x => x.CreateAsync(It.IsAny<CountryViewModel>()));
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace TestDemoPokemonApi.Controllers
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.CountryPathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                testContext.CountryService.Verify(x => x.UpdateAsync(It.IsAny<CountryViewModel>()));
+                testContext.CountryServiceMock.Verify(x => x.UpdateAsync(It.IsAny<CountryViewModel>()));
             }
         }
 
@@ -141,7 +141,7 @@ namespace TestDemoPokemonApi.Controllers
                 var response = await client.PutAsync(SharedData.BaseUrl + SharedData.CountryPathUrl, requestContent);
 
                 Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-                testContext.CountryService.Verify(x => x.UpdateAsync(It.IsAny<CountryViewModel>()));
+                testContext.CountryServiceMock.Verify(x => x.UpdateAsync(It.IsAny<CountryViewModel>()));
             }
         }
 
@@ -182,7 +182,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.DeleteAsync(SharedData.BaseUrl + SharedData.CountryPathUrl + countryId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CountryService.Verify(x => x.DeleteAsync(countryId));
+            testContext.CountryServiceMock.Verify(x => x.DeleteAsync(countryId));
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.DeleteAsync(SharedData.BaseUrl + SharedData.CountryPathUrl + countryId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.CountryService.Verify(x => x.DeleteAsync(countryId));
+            testContext.CountryServiceMock.Verify(x => x.DeleteAsync(countryId));
         }
 
         [Test]
@@ -210,7 +210,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CountryPathUrl + countryId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CountryService.Verify(x => x.GetAsync(countryId));
+            testContext.CountryServiceMock.Verify(x => x.GetAsync(countryId));
 
             var content = await response.Content.ReadAsStringAsync();
             var country = JsonConvert.DeserializeObject<CountryViewModel>(content);
@@ -234,7 +234,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CountryPathUrl + countryId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.CountryService.Verify(x => x.GetAsync(countryId));
+            testContext.CountryServiceMock.Verify(x => x.GetAsync(countryId));
         }
 
         [Test]
@@ -248,7 +248,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CountryPathUrl + SharedData.CountryCitiesPathUrl + countryId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CountryService.Verify(x => x.GetCitiesAsync(countryId));
+            testContext.CountryServiceMock.Verify(x => x.GetCitiesAsync(countryId));
 
             var content = await response.Content.ReadAsStringAsync();
             var cities = JsonConvert.DeserializeObject<IEnumerable<CityViewModel>>(content);
@@ -272,7 +272,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CountryPathUrl + SharedData.CountryCitiesPathUrl + countryId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.CountryService.Verify(x => x.GetCitiesAsync(countryId));
+            testContext.CountryServiceMock.Verify(x => x.GetCitiesAsync(countryId));
         }
 
         [Test]
@@ -286,7 +286,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CountryPathUrl + SharedData.CountryHabitatsPathUrl + countryId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            testContext.CountryService.Verify(x => x.GetHabitatsAsync(countryId));
+            testContext.CountryServiceMock.Verify(x => x.GetHabitatsAsync(countryId));
 
             var content = await response.Content.ReadAsStringAsync();
             var habitats = JsonConvert.DeserializeObject<IEnumerable<HunterViewModel>>(content);
@@ -310,7 +310,7 @@ namespace TestDemoPokemonApi.Controllers
             var response = await client.GetAsync(SharedData.BaseUrl + SharedData.CountryPathUrl + SharedData.CountryHabitatsPathUrl + countryId);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-            testContext.CountryService.Verify(x => x.GetHabitatsAsync(countryId));
+            testContext.CountryServiceMock.Verify(x => x.GetHabitatsAsync(countryId));
         }
     }
 }
