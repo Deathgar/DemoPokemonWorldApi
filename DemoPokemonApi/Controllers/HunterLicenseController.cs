@@ -19,7 +19,7 @@ public class HunterLicenseController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        Ok(await _hunterLicenseService.GetAsync());
+        return Ok(await _hunterLicenseService.GetAsync());
     }
 
     [HttpGet]
