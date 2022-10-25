@@ -31,6 +31,9 @@ public class HabitatService : IHabitatService
 
     public async Task<bool> CreateAsync(HabitatViewModel entity)
     {
+        if (entity == null)
+            return false;
+
         entity.Id = 0;
         var dto = _mapper.Map<HabitatDto>(entity);
 
@@ -42,7 +45,10 @@ public class HabitatService : IHabitatService
 
     public async Task<bool> UpdateAsync(HabitatViewModel entity)
     {
-        bool isHabitatExist = await _repositoryWrapper.CityRepository.Exist(entity.Id);
+        if (entity == null)
+            return false;
+
+        bool isHabitatExist = await _repositoryWrapper.HabitatRepository.Exist(entity.Id);
 
         if (!isHabitatExist)
             return false;

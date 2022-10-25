@@ -13,10 +13,10 @@ using TestDemoPokemonApi.TestData;
 
 namespace TestDemoPokemonApi.Services
 {
-    internal class CountryServiceTest
+    public class CountryServiceTest
     {
         [Test]
-        public async static Task GetCities()
+        public async static Task GetCountries()
         {
             var testContext = TestContext.Create();
             var countryService = new CountryService(SharedData.Mapper, testContext.RepositoryWrapperMock.Object);
