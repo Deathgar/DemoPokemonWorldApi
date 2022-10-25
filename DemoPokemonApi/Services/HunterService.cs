@@ -41,6 +41,7 @@ public class HunterService : IHunterService
             }
         }
 
+        entity.Id = 0;
         var dto = _mapper.Map<HunterDto>(entity);
 
         var createdDto = _repositoryWrapper.HunterRepository.Create(dto);
@@ -79,7 +80,7 @@ public class HunterService : IHunterService
         return result != 0;
     }
 
-    public async Task<CityViewModel> GetCityByHunterAsync(int hunterId)
+    public async Task<CityViewModel> GetCityAsync(int hunterId)
     {
         bool isHunterExist = await _repositoryWrapper.HunterRepository.Exist(hunterId);
 
@@ -93,13 +94,13 @@ public class HunterService : IHunterService
         return _mapper.Map<CityViewModel>(cityDto);
     }
 
-    public async Task<IEnumerable<PokemonViewModel>> GetPokemonsByHunterAsync(int hunterId)
+    public async Task<IEnumerable<PokemonViewModel>> GetPokemonsAsync(int hunterId)
     {
         bool isHunterExist = await _repositoryWrapper.HunterRepository.Exist(hunterId);
 
         if (!isHunterExist)
         {
-            return Enumerable.Empty<PokemonViewModel>();
+            return null;
         }
 
         var pokemonDtos = await _repositoryWrapper.HunterRepository.GetPokemonsByHunterAsync(hunterId);

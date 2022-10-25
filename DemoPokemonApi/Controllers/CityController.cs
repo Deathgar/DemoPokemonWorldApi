@@ -19,24 +19,28 @@ public class CityController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<CityViewModel>> Get()
+    public async Task<IActionResult> Get()
     {
-        return await _cityService.GetAsync();
+        var result = await _cityService.GetAsync();
+
+        return Ok(result);
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<CityViewModel> Get(int id)
+    public async Task<IActionResult> Get(int id)
     {
-        return await _cityService.GetAsync(id);
+        var result = await _cityService.GetAsync(id);
+
+        return result != null ? Ok(result) : NotFound();
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] CityViewModel vm)
+    public async Task<IActionResult> Create([FromBody] CityViewModel vm)
     {
         bool isSuccess = await _cityService.CreateAsync(vm);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpPut]
@@ -44,29 +48,33 @@ public class CityController : ControllerBase
     {
         bool isSuccess = await _cityService.UpdateAsync(vm);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         bool isSuccess = await _cityService.DeleteAsync(id);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpGet]
     [Route("getHunters/{cityId}")]
-    public async Task<IEnumerable<HunterViewModel>> GetCities(int cityId)
+    public async Task<IActionResult> GetHunters(int cityId)
     {
-        return await _cityService.GetHuntersByCityAsync(cityId);
+        var result = await _cityService.GetHuntersAsync(cityId);
+
+        return result != null ? Ok(result) : NotFound();
     }
 
     [HttpGet]
     [Route("getCounty/{cityId}")]
-    public async Task<CountryViewModel> GetHabitats(int cityId)
+    public async Task<IActionResult> GetCountry(int cityId)
     {
-        return await _cityService.GetCountryByCityAsync(cityId);
+        var result = await _cityService.GetCountryAsync(cityId);
+
+        return result != null ? Ok(result) : NotFound();
     }
 }

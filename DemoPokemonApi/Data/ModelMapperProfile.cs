@@ -4,9 +4,9 @@ using DemoPokemonApi.ViewModels;
 
 namespace DemoPokemonApi.Data
 {
-    public class ModelMapper : Profile
+    public class ModelMapperProfile : Profile
     {
-        public ModelMapper()
+        public ModelMapperProfile()
         {
             CreateMap<CountryDto, CountryViewModel>().ReverseMap();
             CreateMap<CityDto, CityViewModel>().ReverseMap();

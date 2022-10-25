@@ -31,6 +31,7 @@ namespace DemoPokemonApi.Services
 
         public async Task<bool> CreateAsync(CountryViewModel entity)
         {
+            entity.Id = 0;
             var dto = _mapper.Map<CountryDto>(entity);
 
             _repositoryWrapper.CountryRepository.Create(dto);
@@ -68,13 +69,13 @@ namespace DemoPokemonApi.Services
             return result != 0;
         }
 
-        public async Task<IEnumerable<CityViewModel>> GetCitiesByCoutryAsync(int countryId)
+        public async Task<IEnumerable<CityViewModel>> GetCitiesAsync(int countryId)
         {
             bool isCountryExist = await _repositoryWrapper.CountryRepository.Exist(countryId);
 
             if(!isCountryExist)
             {
-                return Enumerable.Empty<CityViewModel>();
+                return null;
             }
 
             var cityDtos = await _repositoryWrapper.CountryRepository.GetCitiesByCountryAsync(countryId);
@@ -83,13 +84,13 @@ namespace DemoPokemonApi.Services
 
         }
 
-        public async Task<IEnumerable<HabitatViewModel>> GetHabitatsByCoutryAsync(int countryId)
+        public async Task<IEnumerable<HabitatViewModel>> GetHabitatsAsync(int countryId)
         {
             bool isCountryExist = await _repositoryWrapper.CountryRepository.Exist(countryId);
 
             if (!isCountryExist)
             {
-                return Enumerable.Empty<HabitatViewModel>();
+                return null;
             }
 
             var habitatDtos = await _repositoryWrapper.CountryRepository.GetHabitatsByCountryAsync(countryId);

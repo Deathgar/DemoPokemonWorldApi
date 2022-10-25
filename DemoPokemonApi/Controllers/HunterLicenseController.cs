@@ -17,23 +17,25 @@ public class HunterLicenseController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<HunterLicenseViewModel>> Get()
+    public async Task<IActionResult> Get()
     {
-        return await _hunterLicenseService.GetAsync();
+        Ok(await _hunterLicenseService.GetAsync());
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<HunterLicenseViewModel> Get(int id)
+    public async Task<IActionResult> Get(int id)
     {
-        return await _hunterLicenseService.GetAsync(id);
+        var result = await _hunterLicenseService.GetAsync(id);
+
+        return result != null ? Ok(result) : NotFound();
     }
 
     [HttpPut]
-    public async Task<ActionResult> Update([FromBody] HunterLicenseViewModel vm)
+    public async Task<IActionResult> Update([FromBody] HunterLicenseViewModel vm)
     {
         bool isSuccess = await _hunterLicenseService.UpdateAsync(vm);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 }

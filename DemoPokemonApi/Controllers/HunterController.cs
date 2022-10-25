@@ -17,54 +17,60 @@ public class HunterController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<HunterViewModel>> Get()
+    public async Task<IActionResult> Get()
     {
-        return await _hunterService.GetAsync();
+        return Ok(await _hunterService.GetAsync());
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<HunterViewModel> Get(int id)
+    public async Task<IActionResult> Get(int id)
     {
-        return await _hunterService.GetAsync(id);
+        var result = await _hunterService.GetAsync(id);
+
+        return result != null ? Ok(result) : NotFound();
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] HunterViewModel vm)
+    public async Task<IActionResult> Create([FromBody] HunterViewModel vm)
     {
         bool isSuccess = await _hunterService.CreateAsync(vm);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpPut]
-    public async Task<ActionResult> Update([FromBody] HunterViewModel vm)
+    public async Task<IActionResult> Update([FromBody] HunterViewModel vm)
     {
         bool isSuccess = await _hunterService.UpdateAsync(vm);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         bool isSuccess = await _hunterService.DeleteAsync(id);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpGet]
     [Route("getCity/{hunterId}")]
-    public async Task<CityViewModel> GetCities(int hunterId)
+    public async Task<IActionResult> GetCity(int hunterId)
     {
-        return await _hunterService.GetCityByHunterAsync(hunterId);
+        var result = await _hunterService.GetCityAsync(hunterId);
+
+        return result != null ? Ok(result) : NotFound();
     }
 
     [HttpGet]
     [Route("getPokemons/{hunterId}")]
-    public async Task<IEnumerable<PokemonViewModel>> GetHabitats(int hunterId)
+    public async Task<IActionResult> GetPokemons(int hunterId)
     {
-        return await _hunterService.GetPokemonsByHunterAsync(hunterId);
+        var result = await _hunterService.GetPokemonsAsync(hunterId);
+
+        return result != null ? Ok(result) : NotFound();
     }
 }

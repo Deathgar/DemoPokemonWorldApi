@@ -17,54 +17,60 @@ public class HabitatController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<HabitatViewModel>> Get()
+    public async Task<IActionResult> Get()
     {
-        return await _habitatService.GetAsync();
+        return Ok(await _habitatService.GetAsync());
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<HabitatViewModel> Get(int id)
+    public async Task<IActionResult> Get(int id)
     {
-        return await _habitatService.GetAsync(id);
+        var result = await _habitatService.GetAsync(id);
+
+        return result != null ? Ok(result) : NotFound();
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] HabitatViewModel vm)
+    public async Task<IActionResult> Create([FromBody] HabitatViewModel vm)
     {
         bool isSuccess = await _habitatService.CreateAsync(vm);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpPut]
-    public async Task<ActionResult> Update([FromBody] HabitatViewModel vm)
+    public async Task<IActionResult> Update([FromBody] HabitatViewModel vm)
     {
         bool isSuccess = await _habitatService.UpdateAsync(vm);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         bool isSuccess = await _habitatService.DeleteAsync(id);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpGet]
     [Route("getCountries/{habitatId}")]
-    public async Task<IEnumerable<CountryViewModel>> GetCities(int habitatId)
+    public async Task<IActionResult> GetCountries(int habitatId)
     {
-        return await _habitatService.GetCountriesByHabitatAsync(habitatId);
+        var result = await _habitatService.GetCountriesAsync(habitatId);
+
+        return result != null ? Ok(result) : NotFound();
     }
 
     [HttpGet]
     [Route("getPokemons/{habitatId}")]
-    public async Task<IEnumerable<PokemonViewModel>> GetHabitats(int habitatId)
+    public async Task<IActionResult> GetPokemons(int habitatId)
     {
-        return await _habitatService.GetPokemonsByHabitatAsync(habitatId);
+        var result = await _habitatService.GetPokemonsAsync(habitatId);
+
+        return result != null ? Ok(result) : NotFound();
     }
 }

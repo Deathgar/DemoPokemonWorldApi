@@ -36,6 +36,7 @@ public class PokemonService : IPokemonService
         if (!isExistHabitat)
             return false;
 
+        entity.Id = 0;
         var dto = _mapper.Map<PokemonDto>(entity);
 
         _repositoryWrapper.PokemonRepository.Create(dto);
@@ -68,14 +69,14 @@ public class PokemonService : IPokemonService
         return result != 0;
     }
 
-    public async Task<IEnumerable<HunterViewModel>> GetHunters(int pokemonId)
+    public async Task<IEnumerable<HunterViewModel>> GetHuntersAsync(int pokemonId)
     {
         var hunterDtos = await _repositoryWrapper.PokemonRepository.GetHuntersByPokemonAsync(pokemonId);
 
         return _mapper.Map<IEnumerable<HunterViewModel>>(hunterDtos);
     }
 
-    public async Task<HabitatViewModel> GetHabitat(int pokemonId)
+    public async Task<HabitatViewModel> GetHabitatAsync(int pokemonId)
     {
         var hunterDtos = await _repositoryWrapper.PokemonRepository.GetHabitatByPokemonAsync(pokemonId);
 

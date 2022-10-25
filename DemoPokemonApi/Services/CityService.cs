@@ -37,6 +37,7 @@ public class CityService : ICityService
         if (!isCountryExist)
             return false;
 
+        entity.Id = 0;
         var cityDto = _mapper.Map<CityDto>(entity);
 
         _repositoryWrapper.CityRepository.Create(cityDto);
@@ -74,19 +75,19 @@ public class CityService : ICityService
         return result != 0;
     }
 
-    public async Task<IEnumerable<HunterViewModel>> GetHuntersByCityAsync(int cityId)
+    public async Task<IEnumerable<HunterViewModel>> GetHuntersAsync(int cityId)
     {
         bool isCityExist = await _repositoryWrapper.CityRepository.Exist(cityId);
 
         if (!isCityExist)
-            return Enumerable.Empty<HunterViewModel>();
+            return null;
 
         var hunterDtos = await _repositoryWrapper.CityRepository.GetHuntersByCityAsync(cityId);
 
         return _mapper.Map<IEnumerable<HunterViewModel>>(hunterDtos);
     }
 
-    public async Task<CountryViewModel> GetCountryByCityAsync(int cityId)
+    public async Task<CountryViewModel> GetCountryAsync(int cityId)
     {
         bool isCityExist = await _repositoryWrapper.CityRepository.Exist(cityId);
 

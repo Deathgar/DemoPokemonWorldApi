@@ -4,6 +4,6 @@ namespace DemoPokemonApi.Services.Interfaces;
 
 public interface ICountryService : IBaseService<CountryViewModel>
 {
-    Task<IEnumerable<CityViewModel>> GetCitiesByCoutryAsync(int countryId);
-    Task<IEnumerable<HabitatViewModel>> GetHabitatsByCoutryAsync(int countryId);
+    Task<IEnumerable<CityViewModel>> GetCitiesAsync(int countryId);
+    Task<IEnumerable<HabitatViewModel>> GetHabitatsAsync(int countryId);
 }

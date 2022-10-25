@@ -17,54 +17,60 @@ public class PokemonController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<PokemonViewModel>> Get()
+    public async Task<IActionResult> Get()
     {
-        return await _pokemonService.GetAsync();
+        return Ok(await _pokemonService.GetAsync());
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<PokemonViewModel> Get(int id)
+    public async Task<IActionResult> Get(int id)
     {
-        return await _pokemonService.GetAsync(id);
+        var result = await _pokemonService.GetAsync(id);
+
+        return result != null ? Ok(result) : NotFound();
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] PokemonViewModel vm)
+    public async Task<IActionResult> Create([FromBody] PokemonViewModel vm)
     {
         bool isSuccess = await _pokemonService.CreateAsync(vm);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpPut]
-    public async Task<ActionResult> Update([FromBody] PokemonViewModel vm)
+    public async Task<IActionResult> Update([FromBody] PokemonViewModel vm)
     {
         bool isSuccess = await _pokemonService.UpdateAsync(vm);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         bool isSuccess = await _pokemonService.DeleteAsync(id);
 
-        return isSuccess ? new OkResult() : new BadRequestResult();
+        return isSuccess ? Ok() : NotFound();
     }
 
     [HttpGet]
     [Route("getHunters/{pokemonId}")]
-    public async Task<IEnumerable<HunterViewModel>> GetHunters(int pokemonId)
+    public async Task<IActionResult> GetHunters(int pokemonId)
     {
-        return await _pokemonService.GetHunters(pokemonId);
+        var result = await _pokemonService.GetHuntersAsync(pokemonId);
+
+        return result != null ? Ok(result) : NotFound();
     }
 
     [HttpGet]
     [Route("getHabitat/{pokemonId}")]
-    public async Task<HabitatViewModel> GetHabitat(int pokemonId)
+    public async Task<IActionResult> GetHabitat(int pokemonId)
     {
-        return await _pokemonService.GetHabitat(pokemonId);
+        var result = await _pokemonService.GetHabitatAsync(pokemonId);
+
+        return result != null ? Ok(result) : NotFound();
     }
 }

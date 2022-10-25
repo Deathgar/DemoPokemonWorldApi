@@ -31,6 +31,7 @@ public class HabitatService : IHabitatService
 
     public async Task<bool> CreateAsync(HabitatViewModel entity)
     {
+        entity.Id = 0;
         var dto = _mapper.Map<HabitatDto>(entity);
 
         _repositoryWrapper.HabitatRepository.Create(dto);
@@ -68,13 +69,13 @@ public class HabitatService : IHabitatService
         return result != 0;
     }
 
-    public async Task<IEnumerable<CountryViewModel>> GetCountriesByHabitatAsync(int habitatId)
+    public async Task<IEnumerable<CountryViewModel>> GetCountriesAsync(int habitatId)
     {
         bool isHabitatExist = await _repositoryWrapper.HabitatRepository.Exist(habitatId);
 
         if (!isHabitatExist)
         {
-            return Enumerable.Empty<CountryViewModel>();
+            return null;
         }
 
         var countryDtos = await _repositoryWrapper.HabitatRepository.GetCountriesByHabitatAsync(habitatId);
@@ -82,13 +83,13 @@ public class HabitatService : IHabitatService
         return _mapper.Map<IEnumerable<CountryViewModel>>(countryDtos);
     }
 
-    public async Task<IEnumerable<PokemonViewModel>> GetPokemonsByHabitatAsync(int habitatId)
+    public async Task<IEnumerable<PokemonViewModel>> GetPokemonsAsync(int habitatId)
     {
         bool isHabitatExist = await _repositoryWrapper.HabitatRepository.Exist(habitatId);
 
         if (!isHabitatExist)
         {
-            return Enumerable.Empty<PokemonViewModel>();
+            return null;
         }
 
         var pokemonDtos = await _repositoryWrapper.HabitatRepository.GetPokemonsByHabitatAsync(habitatId);

@@ -5,6 +5,6 @@ namespace DemoPokemonApi.Services.Interfaces;
 
 public interface ICityService : IBaseService<CityViewModel>
 {
-    Task<IEnumerable<HunterViewModel>> GetHuntersByCityAsync(int cityId);
-    Task<CountryViewModel> GetCountryByCityAsync(int cityId);
+    Task<IEnumerable<HunterViewModel>> GetHuntersAsync(int cityId);
+    Task<CountryViewModel> GetCountryAsync(int cityId);
 }
