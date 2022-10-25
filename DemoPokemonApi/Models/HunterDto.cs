@@ -7,7 +7,7 @@ namespace DemoPokemonApi.Models;
 public class HunterDto : BaseDto
 {
     public string Name { get; set; }
-    public string Age { get; set; }
+    public int Age { get; set; }
 
     public List<PokemonDto> Pokemons { get; set; } = new List<PokemonDto>();
 

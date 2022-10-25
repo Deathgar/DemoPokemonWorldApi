@@ -24,9 +24,9 @@ public static class DataSeeder
 
         context.Cities.AddRange(city1, city2, city3);
 
-        var hunter1 = new HunterDto { Name = "Vlad", Age = "24", City = city1 };
-        var hunter2 = new HunterDto { Name = "Aria", Age = "16", City = city3 };
-        var hunter3 = new HunterDto { Name = "Diablo", Age = "666", City = city1 };
+        var hunter1 = new HunterDto { Name = "Vlad", Age = 24, City = city1 };
+        var hunter2 = new HunterDto { Name = "Aria", Age = 16, City = city3 };
+        var hunter3 = new HunterDto { Name = "Diablo", Age = 666, City = city1 };
 
         context.Hunters.AddRange(hunter1, hunter2, hunter3);
 
