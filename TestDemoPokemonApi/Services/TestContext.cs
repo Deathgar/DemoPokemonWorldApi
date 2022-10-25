@@ -60,21 +60,20 @@ namespace TestDemoPokemonApi.Services
 
             RepositoryWrapperMock.SetupGet(x => x.CountryRepository).Returns(CountryRepositoryMock.Object);
             RepositoryWrapperMock.SetupGet(x => x.CityRepository).Returns(CityRepositoryMock.Object);
-            //RepositoryWrapperMock.SetupGet(x => x.HabitatRepository).Returns(HabitatRepositoryMock.Object);
-            //RepositoryWrapperMock.SetupGet(x => x.HunterRepository).Returns(HunterRepositoryMock.Object);
-            //RepositoryWrapperMock.SetupGet(x => x.PokemonRepository).Returns(PokemonRepositoryMock.Object);
-
-            //RepositoryWrapperMock.SetupGet(x => x.HunterLicenseRepository).Returns(HunterLicenseRepositoryMock.Object);
+            RepositoryWrapperMock.SetupGet(x => x.HabitatRepository).Returns(HabitatRepositoryMock.Object);
+            RepositoryWrapperMock.SetupGet(x => x.HunterRepository).Returns(HunterRepositoryMock.Object);
+            RepositoryWrapperMock.SetupGet(x => x.PokemonRepository).Returns(PokemonRepositoryMock.Object);
+            RepositoryWrapperMock.SetupGet(x => x.HunterLicenseRepository).Returns(HunterLicenseRepositoryMock.Object);
         }
 
         private void ConfigureMocks()
         {
             ConfigureCountryMock();
             ConfigureCityMock();
-            //ConfigureHabitatMock();
-            //ConfigureHunterMock();
-            //ConfigurePokemonMock();
-            //ConfigureHunterLicenseMock();
+            ConfigureHabitatMock();
+            ConfigureHunterMock();
+            ConfigurePokemonMock();
+            ConfigureHunterLicenseMock();
         }
 
         private void ConfigureCountryMock()
@@ -107,13 +106,11 @@ namespace TestDemoPokemonApi.Services
         {
             var cities = new List<CityDto>();
             DbSet<CityDto> dbSetCities = null;
-            var countries = new List<CountryDto>();
 
             using (var context = new PokemonWorldContext(DbContextOptions))
             {
                 cities = context.Cities.Include(x => x.Country).Include(x => x.Hunters).ToList();
                 dbSetCities = context.Cities;
-                countries = context.Countries.ToList();
             }
 
             CityRepositoryMock.Setup(x => x.Update(It.IsAny<CityDto>()));
@@ -133,22 +130,103 @@ namespace TestDemoPokemonApi.Services
 
         private void ConfigureHabitatMock()
         {
-            throw new NotImplementedException();
+            DbSet<HabitatDto> dbSetHabitats = null;
+            var habitats = new List<HabitatDto>();
+
+            using (var context = new PokemonWorldContext(DbContextOptions))
+            {
+                habitats = context.Habitats.Include(x => x.Pokemons).Include(x => x.Countries).ToList();
+                dbSetHabitats = context.Habitats;
+            }
+
+            HabitatRepositoryMock.Setup(x => x.Update(It.IsAny<HabitatDto>()));
+            HabitatRepositoryMock.Setup(x => x.Create(It.IsAny<HabitatDto>())).Returns((HabitatDto x) => x);
+            HabitatRepositoryMock.Setup(x => x.Delete(It.IsAny<HabitatDto>()));
+            HabitatRepositoryMock.Setup(x => x.Exist(It.IsAny<int>())).ReturnsAsync((int id) => habitats.Any(y => y.Id == id));
+            HabitatRepositoryMock.Setup(x => x.GetAll()).Returns(habitats.AsQueryable());
+            HabitatRepositoryMock.Setup(x => x.GetByCondition(It.IsAny<Expression<Func<HabitatDto, bool>>>())).Returns((Expression<Func<HabitatDto, bool>> e) => dbSetHabitats.Where(e));
+
+            HabitatRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((int id) => habitats.FirstOrDefault(x => x.Id == id));
+            HabitatRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(habitats);
+            HabitatRepositoryMock.Setup(x => x.GetByConditionAsync(It.IsAny<Expression<Func<HabitatDto, bool>>>())).ReturnsAsync((Expression<Func<HabitatDto, bool>> e) => dbSetHabitats.Where(e).ToList());
+
+            HabitatRepositoryMock.Setup(x => x.GetCountriesByHabitatAsync(It.IsAny<int>())).ReturnsAsync((int id) => habitats.FirstOrDefault(x => x.Id == id).Countries);
+            HabitatRepositoryMock.Setup(x => x.GetPokemonsByHabitatAsync(It.IsAny<int>())).ReturnsAsync((int id) => habitats.FirstOrDefault(x => x.Id == id).Pokemons);
         }
 
         private void ConfigureHunterMock()
         {
-            throw new NotImplementedException();
+            DbSet<HunterDto> dbSetHunters = null;
+            var hunters = new List<HunterDto>();
+
+            using (var context = new PokemonWorldContext(DbContextOptions))
+            {
+                hunters = context.Hunters.Include(x => x.Pokemons).Include(x => x.City).Include(x => x.HunterLicense).ToList();
+                dbSetHunters = context.Hunters;
+            }
+
+            HunterRepositoryMock.Setup(x => x.Update(It.IsAny<HunterDto>()));
+            HunterRepositoryMock.Setup(x => x.Create(It.IsAny<HunterDto>())).Returns((HunterDto x) => x);
+            HunterRepositoryMock.Setup(x => x.Delete(It.IsAny<HunterDto>()));
+            HunterRepositoryMock.Setup(x => x.Exist(It.IsAny<int>())).ReturnsAsync((int id) => hunters.Any(y => y.Id == id));
+            HunterRepositoryMock.Setup(x => x.GetAll()).Returns(hunters.AsQueryable());
+            HunterRepositoryMock.Setup(x => x.GetByCondition(It.IsAny<Expression<Func<HunterDto, bool>>>())).Returns((Expression<Func<HunterDto, bool>> e) => dbSetHunters.Where(e));
+
+            HunterRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((int id) => hunters.FirstOrDefault(x => x.Id == id));
+            HunterRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(hunters);
+            HunterRepositoryMock.Setup(x => x.GetByConditionAsync(It.IsAny<Expression<Func<HunterDto, bool>>>())).ReturnsAsync((Expression<Func<HunterDto, bool>> e) => dbSetHunters.Where(e).ToList());
+
+            HunterRepositoryMock.Setup(x => x.GetCityByHunterAsync(It.IsAny<int>())).ReturnsAsync((int id) => hunters.FirstOrDefault(x => x.Id == id).City);
+            HunterRepositoryMock.Setup(x => x.GetPokemonsByHunterAsync(It.IsAny<int>())).ReturnsAsync((int id) => hunters.FirstOrDefault(x => x.Id == id).Pokemons);
         }
 
         private void ConfigurePokemonMock()
         {
-            throw new NotImplementedException();
+            DbSet<PokemonDto> dbSetPokemons = null;
+            var pokemons = new List<PokemonDto>();
+
+            using (var context = new PokemonWorldContext(DbContextOptions))
+            {
+                pokemons = context.Pokemons.Include(x => x.Hunters).Include(x => x.Habitat).ToList();
+                dbSetPokemons = context.Pokemons;
+            }
+
+            PokemonRepositoryMock.Setup(x => x.Update(It.IsAny<PokemonDto>()));
+            PokemonRepositoryMock.Setup(x => x.Create(It.IsAny<PokemonDto>())).Returns((PokemonDto x) => x);
+            PokemonRepositoryMock.Setup(x => x.Delete(It.IsAny<PokemonDto>()));
+            PokemonRepositoryMock.Setup(x => x.Exist(It.IsAny<int>())).ReturnsAsync((int id) => pokemons.Any(y => y.Id == id));
+            PokemonRepositoryMock.Setup(x => x.GetAll()).Returns(pokemons.AsQueryable());
+            PokemonRepositoryMock.Setup(x => x.GetByCondition(It.IsAny<Expression<Func<PokemonDto, bool>>>())).Returns((Expression<Func<PokemonDto, bool>> e) => dbSetPokemons.Where(e));
+
+            PokemonRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((int id) => pokemons.FirstOrDefault(x => x.Id == id));
+            PokemonRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(pokemons);
+            PokemonRepositoryMock.Setup(x => x.GetByConditionAsync(It.IsAny<Expression<Func<PokemonDto, bool>>>())).ReturnsAsync((Expression<Func<PokemonDto, bool>> e) => dbSetPokemons.Where(e).ToList());
+
+            PokemonRepositoryMock.Setup(x => x.GetHuntersByPokemonAsync(It.IsAny<int>())).ReturnsAsync((int id) => pokemons.FirstOrDefault(x => x.Id == id).Hunters);
+            PokemonRepositoryMock.Setup(x => x.GetHabitatByPokemonAsync(It.IsAny<int>())).ReturnsAsync((int id) => pokemons.FirstOrDefault(x => x.Id == id).Habitat);
         }
 
         private void ConfigureHunterLicenseMock()
         {
-            throw new NotImplementedException();
+            DbSet<HunterLicenseDto> dbSetHunterLicense = null;
+            var hunterLicense = new List<HunterLicenseDto>();
+
+            using (var context = new PokemonWorldContext(DbContextOptions))
+            {
+                hunterLicense = context.HunterLicenses.Include(x => x.Hunter).ToList();
+                dbSetHunterLicense = context.HunterLicenses;
+            }
+
+            HunterLicenseRepositoryMock.Setup(x => x.Update(It.IsAny<HunterLicenseDto>()));
+            HunterLicenseRepositoryMock.Setup(x => x.Create(It.IsAny<HunterLicenseDto>())).Returns((HunterLicenseDto x) => x);
+            HunterLicenseRepositoryMock.Setup(x => x.Delete(It.IsAny<HunterLicenseDto>()));
+            HunterLicenseRepositoryMock.Setup(x => x.Exist(It.IsAny<int>())).ReturnsAsync((int id) => hunterLicense.Any(y => y.Id == id));
+            HunterLicenseRepositoryMock.Setup(x => x.GetAll()).Returns(hunterLicense.AsQueryable());
+            HunterLicenseRepositoryMock.Setup(x => x.GetByCondition(It.IsAny<Expression<Func<HunterLicenseDto, bool>>>())).Returns((Expression<Func<HunterLicenseDto, bool>> e) => dbSetHunterLicense.Where(e));
+
+            HunterLicenseRepositoryMock.Setup(x => x.GetByIdAsync(It.IsAny<int>())).ReturnsAsync((int id) => hunterLicense.FirstOrDefault(x => x.Id == id));
+            HunterLicenseRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(hunterLicense);
+            HunterLicenseRepositoryMock.Setup(x => x.GetByConditionAsync(It.IsAny<Expression<Func<HunterLicenseDto, bool>>>())).ReturnsAsync((Expression<Func<HunterLicenseDto, bool>> e) => dbSetHunterLicense.Where(e).ToList());
         }
     }
 }
