@@ -221,14 +221,16 @@ public class TestContext
     }
     private void ConfigureHunterLicenseMock()
     {
-        HunterLicenseService.Setup(x => x.CreateAsync(It.IsAny<HunterLicenseViewModel>())).ReturnsAsync(true);
-        HunterLicenseService.Setup(x => x.UpdateAsync(It.IsAny<HunterLicenseViewModel>())).ReturnsAsync(true);
-        HunterLicenseService.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync(true);
-
+        var hunterLicenses = new List<HunterLicenseDto>();
+               
         using (var context = new PokemonWorldContext(DbContextOptions))
         {
-            HunterLicenseService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HunterLicenseViewModel>(context.HunterLicenses.FirstOrDefault(x => x.Id == id)));
-            HunterLicenseService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HunterLicenseViewModel>>(context.HunterLicenses.ToList()));
+            hunterLicenses = context.HunterLicenses.ToList();
         }
+
+        HunterLicenseService.Setup(x => x.GetAsync(It.IsAny<int>())).ReturnsAsync((int id) => SharedData.Mapper.Map<HunterLicenseViewModel>(hunterLicenses.FirstOrDefault(x => x.Id == id)));
+        HunterLicenseService.Setup(x => x.GetAsync()).ReturnsAsync(SharedData.Mapper.Map<IEnumerable<HunterLicenseViewModel>>(hunterLicenses.ToList()));
+
+        HunterLicenseService.Setup(x => x.UpdateAsync(It.IsAny<HunterLicenseViewModel>())).ReturnsAsync((HunterLicenseViewModel x) => hunterLicenses.Any(y => y.Id == x.Id));
     }
 }
